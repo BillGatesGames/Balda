@@ -40,13 +40,18 @@ namespace Balda
 
         public void SetData(MessageData data)
         {
-            _text.text = data.Message.Text;
-            _leftBtnText.text = data.LeftButton.Text;
-            _rightBtnText.text = data.RightButton.Text;
+            _text.text = GetLocal(data.Message.Alias);
+            _leftBtnText.text = GetLocal(data.LeftButton.Alias);
+            _rightBtnText.text = GetLocal(data.RightButton.Alias);
 
             _leftBtn.gameObject.SetActive(data.LeftButton.Active);
             _rightBtn.gameObject.SetActive(data.RightButton.Active);
             _gameObject.SetActive(data.Message.Active);
+        }
+
+        private string GetLocal(string text)
+        {
+            return LocalizationManager.Instance.Get(text);
         }
 
         void Start()

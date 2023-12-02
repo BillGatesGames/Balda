@@ -1,5 +1,7 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace Balda
@@ -25,7 +27,7 @@ namespace Balda
         [SerializeField]
         private bool _firstPlayerIsHuman;
 
-        void Start()
+        public void Build()
         {
             var field = new FieldPresenter(new FieldModel(), _fieldView);
             var alphabet = new AlphabetPresenter(new AlphabetModel(), _alphabetView);

@@ -8,18 +8,18 @@ namespace Balda
     {
         public class ItemData
         {
-            public string Text;
+            public string Alias;
             public bool Active = true;
 
-            public ItemData(string text, bool active)
+            public ItemData(string alias, bool active)
             {
-                Text = text;
+                Alias = alias;
                 Active = active;
             }
 
             public ItemData(bool active)
             {
-                Text = string.Empty;
+                Alias = string.Empty;
                 Active = active;
             }
         }
@@ -47,14 +47,14 @@ namespace Balda
                 case State.Init:
                     {
                         message.Message.Active = false;
-                        message.LeftButton = new MessageData.ItemData("OK", true);
-                        message.RightButton = new MessageData.ItemData("Сбросить", true);
+                        message.LeftButton = new MessageData.ItemData("ok", true);
+                        message.RightButton = new MessageData.ItemData("reset", true);
                     }
                     break;
                 case State.Completed:
                     {
-                        message.Message = new MessageData.ItemData("Игра завершена", true);
-                        message.LeftButton = new MessageData.ItemData("OK", true);
+                        message.Message = new MessageData.ItemData("game_completed", true);
+                        message.LeftButton = new MessageData.ItemData("restart", true);
                         message.RightButton = new MessageData.ItemData(false);
                     }
                     break;
@@ -64,16 +64,16 @@ namespace Balda
             {
                 case SubState.LetterSelection:
                     {
-                        message.Message = new MessageData.ItemData("Добавьте новую букву, чтобы она образовывала новое слово", true);
-                        message.LeftButton = new MessageData.ItemData("OK", true);
-                        message.RightButton = new MessageData.ItemData("Сбросить", true);
+                        message.Message = new MessageData.ItemData("add_new_letter", true);
+                        message.LeftButton = new MessageData.ItemData("ok", true);
+                        message.RightButton = new MessageData.ItemData("reset", true);
                     }
                     break;
                 case SubState.WordSelection:
                     {
-                        message.Message = new MessageData.ItemData("Поочередно выберите каждую букву нового слова", true);
-                        message.LeftButton = new MessageData.ItemData("OK", true);
-                        message.RightButton = new MessageData.ItemData("Сбросить", true);
+                        message.Message = new MessageData.ItemData("select_word", true);
+                        message.LeftButton = new MessageData.ItemData("ok", true);
+                        message.RightButton = new MessageData.ItemData("reset", true);
                     }
                     break;
             }

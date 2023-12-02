@@ -21,7 +21,7 @@ namespace Balda
 
         public AlphabetModel()
         {
-            _chars = "юабцдефгхийклмнопярстужвьызшэщчъ".ToCharArray().ToList();
+            _chars = LocalizationManager.Instance.GetAlphabet().ToCharArray().ToList();
         }
     }
 }

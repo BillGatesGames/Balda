@@ -1,0 +1,42 @@
+{
+  "Configs": {
+    "EN": {
+      "FileName": "dictionary_en",
+      "Alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    },
+    "RU": {
+      "FileName": "dictionary_ru",
+      "Alphabet": "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
+    }
+  },
+  "Localization": {
+    "ok": {
+      "EN": "OK",
+      "RU": "OK"
+    },
+    "reset": {
+      "EN": "Reset",
+      "RU": "Сбросить"
+    },
+    "total": {
+      "EN": "Total: {0}",
+      "RU": "Итого: {0}"
+    },
+    "restart": {
+      "EN": "Restart",
+      "RU": "Заново"
+    },
+    "game_completed": {
+      "EN": "Game completed",
+      "RU": "Игра завершена"
+    },
+    "add_new_letter": {
+      "EN": "Add a new letter to form a new word",
+      "RU": "Добавьте новую букву, чтобы она образовывала новое слово"
+    },
+    "select_word": {
+      "EN": "Choose each letter of the new word one by one",
+      "RU": "Поочередно выберите каждую букву нового слова"
+    }
+  }
+}

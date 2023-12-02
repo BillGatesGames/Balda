@@ -21,7 +21,7 @@ namespace Balda
 
         public string GetTotalText()
         {
-            return $"Итого: {Words.Sum(w => w.Length)}";
+            return string.Format(LocalizationManager.Instance.Get("total"), Words.Sum(w => w.Length));
         }
     }
 }

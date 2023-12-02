@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IWordListPresenter : IStateHandler
+namespace Balda
 {
-    void AddWord(string text);
+    public interface IWordListPresenter : IStateHandler
+    {
+        void AddWord(string text);
+    }
 }

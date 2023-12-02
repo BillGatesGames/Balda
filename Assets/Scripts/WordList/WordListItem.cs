@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class WordListItem : MonoBehaviour
+namespace Balda
 {
-    [SerializeField]
-    private TextMeshProUGUI _text;
-
-    public void SetWord(string word)
+    public class WordListItem : MonoBehaviour
     {
-        _text.text = $"{word} ({word.Length})";
-    }
+        [SerializeField]
+        private TextMeshProUGUI _text;
 
-    void Start()
-    {
-        
+        public void SetWord(string word)
+        {
+            _text.text = $"{word} ({word.Length})";
+        }
+
+        void Start()
+        {
+
+        }
     }
 }

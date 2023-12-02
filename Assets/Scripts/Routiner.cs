@@ -2,18 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Routiner : MonoBehaviour
+namespace Balda
 {
-    public static Routiner Instance { get; private set; }
-
-    private void Awake()
+    public class Routiner : MonoBehaviour
     {
-        Instance = this; 
-    }  
+        public static Routiner Instance { get; private set; }
 
-    void Start()
-    {
-        
+        private void Awake()
+        {
+            Instance = this;
+        }
+
+        void Start()
+        {
+
+        }
     }
-
 }

@@ -2,45 +2,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WordListPresenter : IWordListPresenter
+namespace Balda
 {
-    private IWordListModel _model;
-    private IWordListView _view;
-
-    private WordListPresenter() { }
-
-    public WordListPresenter(IWordListModel model, IWordListView view)
+    public class WordListPresenter : IWordListPresenter
     {
-        _model = model;
-        _view = view;
-        _view.Init(this);
+        private IWordListModel _model;
+        private IWordListView _view;
 
-        EventBus.Register(this);
-    }
+        private WordListPresenter() { }
 
-    public void AddWord(string text)
-    {
-        _model.Words.Add(text);
-
-        UpdateView();
-    }
-
-    public void SwitchToState(StateData data)
-    {
-        switch (data.State)
+        public WordListPresenter(IWordListModel model, IWordListView view)
         {
-            case State.Init:
-                {
-                    _model.Clear();
-                }
-                break;
+            _model = model;
+            _view = view;
+            _view.Init(this);
+
+            EventBus.Register(this);
         }
 
-        UpdateView();
-    }
+        public void AddWord(string text)
+        {
+            _model.Words.Add(text);
 
-    private void UpdateView()
-    {
-        _view.UpdateView(_model.Words, _model.GetTotalText());
+            UpdateView();
+        }
+
+        public void SwitchToState(StateData data)
+        {
+            switch (data.State)
+            {
+                case State.Init:
+                    {
+                        _model.Clear();
+                    }
+                    break;
+            }
+
+            UpdateView();
+        }
+
+        private void UpdateView()
+        {
+            _view.UpdateView(_model.Words, _model.GetTotalText());
+        }
     }
 }

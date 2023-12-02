@@ -2,23 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MessageModel : IMessageModel
+namespace Balda
 {
-    public string GetButtonText()
+    public class MessageModel : IMessageModel
     {
-        return "OK";
-    }
-
-    public string GetMessageText(SubState state)
-    {
-        switch (state)
+        public string GetButtonText()
         {
-            case SubState.LetterSelection:
-                return "ƒобавьте новую букву, чтобы она образовывала новое слово";
-            case SubState.WordSelection:
-                return "ѕоочередно выберите каждую букву нового слова";
+            return "OK";
         }
 
-        return string.Empty;
+        public string GetMessageText(SubState state)
+        {
+            switch (state)
+            {
+                case SubState.LetterSelection:
+                    return "ƒобавьте новую букву, чтобы она образовывала новое слово";
+                case SubState.WordSelection:
+                    return "ѕоочередно выберите каждую букву нового слова";
+            }
+
+            return string.Empty;
+        }
     }
 }

@@ -4,89 +4,92 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Human : IPlayer
+namespace Balda
 {
-    public event Action<IPlayer> OnLetterSet;
-    public event Action<IPlayer> OnMoveCompleted;
-    public event Action<IPlayer> OnResetMoveState;
-    public event Action<IPlayer, Error> OnError;
-
-    private IFieldPresenter _field;
-    private IMessagePresenter _message;
-    private IAlphabetPresenter _alphabet;
-    private IWordListPresenter _wordList;
-    private Func<(State State, SubState SubState)> _stateProvider;
-
-    public bool InputLocking => false;
-
-    private Human() { }
-
-    public Human(IFieldPresenter field, IAlphabetPresenter alphabet, IMessagePresenter message, IWordListPresenter wordList, Func<(State State, SubState SubState)> stateProvider)
+    public class Human : IPlayer
     {
-        _field = field;
-        _alphabet = alphabet;
-        _message = message;
-        _wordList = wordList;
-        _stateProvider = stateProvider;
+        public event Action<IPlayer> OnLetterSet;
+        public event Action<IPlayer> OnMoveCompleted;
+        public event Action<IPlayer> OnResetMoveState;
+        public event Action<IPlayer, Error> OnError;
 
-        _alphabet.OnCellClick += Alphabet_OnCellClick;
-        _message.OnOkClick += Message_OnOKClick;
-        _message.OnResetClick += Message_OnResetClick;
-    }
+        private IFieldPresenter _field;
+        private IMessagePresenter _message;
+        private IAlphabetPresenter _alphabet;
+        private IWordListPresenter _wordList;
+        private Func<(State State, SubState SubState)> _stateProvider;
 
-    private void Alphabet_OnCellClick(Cell cell)
-    {
-        if (_stateProvider().SubState == SubState.LetterSelection)
+        public bool InputLocking => false;
+
+        private Human() { }
+
+        public Human(IFieldPresenter field, IAlphabetPresenter alphabet, IMessagePresenter message, IWordListPresenter wordList, Func<(State State, SubState SubState)> stateProvider)
         {
-            if (_field.GetModel().Selection.Count == 1)
+            _field = field;
+            _alphabet = alphabet;
+            _message = message;
+            _wordList = wordList;
+            _stateProvider = stateProvider;
+
+            _alphabet.OnCellClick += Alphabet_OnCellClick;
+            _message.OnOkClick += Message_OnOKClick;
+            _message.OnResetClick += Message_OnResetClick;
+        }
+
+        private void Alphabet_OnCellClick(Cell cell)
+        {
+            if (_stateProvider().SubState == SubState.LetterSelection)
             {
-                var pos = _field.GetModel().Selection.First();
-                _field.SetChar(pos, cell.Char.Value);
+                if (_field.GetModel().Selection.Positions.Count == 1)
+                {
+                    var pos = _field.GetModel().Selection.Positions.First();
+                    _field.SetChar(pos, cell.Char.Value);
+                }
             }
         }
-    }
 
-    private void Message_OnOKClick()
-    {
-        switch (_stateProvider().SubState)
+        private void Message_OnOKClick()
         {
-            case SubState.LetterSelection:
-                {
-                    if (_field.GetModel().LastCharPos.HasValue)
+            switch (_stateProvider().SubState)
+            {
+                case SubState.LetterSelection:
                     {
-                        OnLetterSet?.Invoke(this);
+                        if (_field.GetModel().LastCharPos.HasValue)
+                        {
+                            OnLetterSet?.Invoke(this);
+                        }
                     }
-                }
-                break;
-            case SubState.WordSelection:
-                {
-                    if (_field.GetModel().TrySetSelectedWord())
+                    break;
+                case SubState.WordSelection:
                     {
-                        var word = _field.GetModel().GetSelectedWord();
-                        _wordList.AddWord(word);
+                        if (_field.GetModel().TrySetSelectedWord())
+                        {
+                            var word = _field.GetModel().Selection.GetWord();
+                            _wordList.AddWord(word);
 
-                        OnMoveCompleted?.Invoke(this);
+                            OnMoveCompleted?.Invoke(this);
+                        }
+                        else
+                        {
+                            OnError?.Invoke(this, Error.WordNotExists);
+                        }
                     }
-                    else
-                    {
-                        OnError?.Invoke(this, Error.WordNotExists);
-                    }
-                }
-                break;
+                    break;
+            }
         }
-    }
 
 
-    private void Message_OnResetClick()
-    {
-        if (_stateProvider().SubState != SubState.None)
+        private void Message_OnResetClick()
         {
-            OnResetMoveState?.Invoke(this);
+            if (_stateProvider().SubState != SubState.None)
+            {
+                OnResetMoveState?.Invoke(this);
+            }
         }
-    }
 
-    public void Move()
-    {
-        
+        public void Move()
+        {
+
+        }
     }
 }

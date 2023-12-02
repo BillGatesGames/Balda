@@ -3,61 +3,63 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MessagePresenter : IMessagePresenter
+namespace Balda
 {
-    public event Action OnOkClick;
-    public event Action OnResetClick;
-
-    private IMessageModel _model;
-    private IMessageView _view;
-
-    public MessagePresenter(IMessageModel model, IMessageView view)
+    public class MessagePresenter : IMessagePresenter
     {
-        _model = model;
-        _view = view;
-        _view.Init(this);
+        public event Action OnOkClick;
+        public event Action OnResetClick;
 
-        EventBus.Register(this);
-    }
+        private IMessageModel _model;
+        private IMessageView _view;
 
-    public void OkClick()
-    {
-        OnOkClick?.Invoke();
-    }
-
-    public void ResetClick()
-    {
-        OnResetClick?.Invoke();    
-    }
-
-    public void SwitchToState(StateData data)
-    {
-        switch (data.State)
+        public MessagePresenter(IMessageModel model, IMessageView view)
         {
-            case State.Init:
-            case State.Finish:
-                {
-                    _view.Hide();
-                }
-                break;
-            case State.Player1Move:
-            case State.Player2Move:
-                {
-                    if (data.SubState == SubState.None)
-                    {
-                        return;
-                    }
+            _model = model;
+            _view = view;
+            _view.Init(this);
 
-                    if (data.InputLocking)
+            EventBus.Register(this);
+        }
+
+        public void OkClick()
+        {
+            OnOkClick?.Invoke();
+        }
+
+        public void ResetClick()
+        {
+            OnResetClick?.Invoke();
+        }
+
+        public void SwitchToState(StateData data)
+        {
+            switch (data.State)
+            {
+                case State.Init:
+                case State.Finish:
                     {
                         _view.Hide();
-                        return;
                     }
+                    break;
+                case State.Player1Move:
+                case State.Player2Move:
+                    {
+                        if (data.SubState == SubState.None)
+                        {
+                            return;
+                        }
 
-                    _view.Show(_model.GetMessageText(data.SubState));
-                }
-                break;
+                        if (data.InputLocking)
+                        {
+                            _view.Hide();
+                            return;
+                        }
+
+                        _view.Show(_model.GetMessageText(data.SubState));
+                    }
+                    break;
+            }
         }
     }
-
 }

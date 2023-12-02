@@ -2,37 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateMachineModel : IStateMachineModel
+namespace Balda
 {
-    private State _state;
-    public State State 
-    { 
-        get
-        {
-            return _state;
-        }
-
-        set
-        {
-            _state = value;
-
-            //EventBus.RaiseEvent<IStateHandler>(h => h.Handle(_state));
-        }
-    }
-
-    private SubState _subState;
-    public SubState SubState
+    public class StateMachineModel : IStateMachineModel
     {
-        get
-        {
-            return _subState;
-        }
+        public State State { get; set; }
 
-        set
-        {
-            _subState = value;
-
-            //EventBus.RaiseEvent<ISubStateHandler>(h => h.Handle(_subState));
-        }
+        public SubState SubState { get; set; }
     }
 }

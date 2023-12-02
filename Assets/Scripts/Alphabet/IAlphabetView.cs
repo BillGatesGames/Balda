@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 
-public interface IAlphabetView
+namespace Balda
 {
-    void Init(IAlphabetPresenter presenter);
-    void UpdateView(IReadOnlyList<char> chars);
+    public interface IAlphabetView
+    {
+        void Init(IAlphabetPresenter presenter);
+        void UpdateView(IReadOnlyList<char> chars);
+    }
 }

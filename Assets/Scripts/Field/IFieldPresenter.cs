@@ -3,12 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IFieldPresenter : IStateHandler
+namespace Balda
 {
-    IEnumerator ShowWord(Word word, float delay, Action callback);
-    void SetChar(Vector2Int pos, char @char, bool select = false);
-    void CellClick(Cell cell);
-    IFieldModel GetModel();
-    IFieldView GetView();
+    public interface IFieldPresenter : IStateHandler
+    {
+        IEnumerator ShowWord(Word word, float delay, Action callback);
+        void SetChar(Vector2Int pos, char @char, bool select = false);
+        void CellClick(Cell cell);
+        IFieldModel GetModel();
+        IFieldView GetView();
+    }
 }
 

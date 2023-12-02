@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IAlphabetModel
+namespace Balda
 {
-    IReadOnlyList<char> Chars { get; }
-
-    bool IsLocked { get; set; }
+    public interface IAlphabetModel
+    {
+        IReadOnlyList<char> Chars { get; }
+        bool IsLocked { get; set; }
+    }
 }

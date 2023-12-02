@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class AlphabetModel : IAlphabetModel
+namespace Balda
 {
-    private List<char> _chars;
-
-    public IReadOnlyList<char> Chars
+    public class AlphabetModel : IAlphabetModel
     {
-        get
+        private List<char> _chars;
+
+        public IReadOnlyList<char> Chars
         {
-            return _chars;
+            get
+            {
+                return _chars;
+            }
         }
-    }
 
-    public bool IsLocked { get; set; } = false;
+        public bool IsLocked { get; set; } = false;
 
-    public AlphabetModel()
-    {
-        _chars = "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞß".ToCharArray().ToList();
+        public AlphabetModel()
+        {
+            _chars = "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞß".ToCharArray().ToList();
+        }
     }
 }

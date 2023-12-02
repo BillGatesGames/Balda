@@ -1,3 +1,6 @@
-﻿public interface IStateMachinePresenter : IStateHandler
+﻿namespace Balda
 {
+    public interface IStateMachinePresenter : IStateHandler
+    {
+    }
 }

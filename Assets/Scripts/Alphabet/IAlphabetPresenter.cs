@@ -1,7 +1,10 @@
 ﻿using System;
 
-public interface IAlphabetPresenter : IStateHandler
+namespace Balda
 {
-    event Action<Cell> OnCellClick;
-    void CellClick(Cell cell);
+    public interface IAlphabetPresenter : IStateHandler
+    {
+        event Action<Cell> OnCellClick;
+        void CellClick(Cell cell);
+    }
 }

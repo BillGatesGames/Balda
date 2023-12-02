@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class WordListModel : IWordListModel
+namespace Balda
 {
-    public List<string> Words { get; }
-
-    public WordListModel()
+    public class WordListModel : IWordListModel
     {
-        Words = new List<string>();
-    }
+        public List<string> Words { get; }
 
-    public void Clear()
-    {
-        Words.Clear();
-    }
+        public WordListModel()
+        {
+            Words = new List<string>();
+        }
 
-    public string GetTotalText()
-    {
-        return $"Итого: {Words.Sum(w => w.Length)}";
+        public void Clear()
+        {
+            Words.Clear();
+        }
+
+        public string GetTotalText()
+        {
+            return $"Итого: {Words.Sum(w => w.Length)}";
+        }
     }
 }

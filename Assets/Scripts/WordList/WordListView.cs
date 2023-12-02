@@ -3,60 +3,62 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class WordListView : MonoBehaviour, IWordListView
+namespace Balda
 {
-    [SerializeField]
-    private RectTransform _itemsParent;
-
-    [SerializeField]
-    private TextMeshProUGUI _totalText;
-
-    [SerializeField]
-    private WordListItem _wordListItemPrefab;
-
-    IWordListPresenter _presenter;
-
-    public void Init(IWordListPresenter presenter)
+    public class WordListView : MonoBehaviour, IWordListView
     {
-        _presenter = presenter;
-    }
+        [SerializeField]
+        private RectTransform _itemsParent;
 
-    public void AddWord(string word)
-    {
-        _presenter.AddWord(word);
-    }
+        [SerializeField]
+        private TextMeshProUGUI _totalText;
 
-    private void SetTotalText(string text)
-    {
-        _totalText.text = text;
-    }
+        [SerializeField]
+        private WordListItem _wordListItemPrefab;
 
-    private void Clear()
-    {
-        var items = GetComponentsInChildren<WordListItem>(true);
+        IWordListPresenter _presenter;
 
-        foreach (var item in items)
+        public void Init(IWordListPresenter presenter)
         {
-            Destroy(item.gameObject);
-        }
-    }
-
-    public void UpdateView(IEnumerable<string> words, string totalText)
-    {
-        Clear();
-
-        foreach (var word in words)
-        {
-            var item = Instantiate(_wordListItemPrefab, _itemsParent);
-            item.SetWord(word);
+            _presenter = presenter;
         }
 
-        SetTotalText(totalText);
+        public void AddWord(string word)
+        {
+            _presenter.AddWord(word);
+        }
+
+        private void SetTotalText(string text)
+        {
+            _totalText.text = text;
+        }
+
+        private void Clear()
+        {
+            var items = GetComponentsInChildren<WordListItem>(true);
+
+            foreach (var item in items)
+            {
+                Destroy(item.gameObject);
+            }
+        }
+
+        public void UpdateView(IEnumerable<string> words, string totalText)
+        {
+            Clear();
+
+            foreach (var word in words)
+            {
+                var item = Instantiate(_wordListItemPrefab, _itemsParent);
+                item.SetWord(word);
+            }
+
+            SetTotalText(totalText);
+        }
+
+        void Start()
+        {
+
+        }
     }
-
-    void Start()
-    {
-
-    }
-
 }

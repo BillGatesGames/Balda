@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IMessageModel
+namespace Balda
 {
-    string GetMessageText(SubState state);
-    string GetButtonText();
+    public interface IMessageModel
+    {
+        string GetMessageText(SubState state);
+        string GetButtonText();
+    }
 }

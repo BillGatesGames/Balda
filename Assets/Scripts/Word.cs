@@ -4,86 +4,89 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Letter : ICloneable
+namespace Balda
 {
-    public char Char;
-    public bool IsNew;
-    public Vector2Int Pos;
-    public Letter(char @char, Vector2Int pos, bool isNew = false)
+    public class Letter : ICloneable
     {
-        Char = @char;
-        Pos = pos;
-        IsNew = isNew;
-    }
-
-    public object Clone()
-    {
-        return new Letter(Char, Pos, IsNew);
-    }
-}
-
-public class Word : ICloneable
-{
-    private string _word;
-    public List<Letter> Letters;
-
-    public Word()
-    {
-        Letters = new List<Letter>();
-    }
-
-    public Word(string word)
-    {
-        Letters = new List<Letter>();
-
-        for (int i = 0; i < word.Length; i++)
+        public char Char;
+        public bool IsNew;
+        public Vector2Int Pos;
+        public Letter(char @char, Vector2Int pos, bool isNew = false)
         {
-            Letters.Add(new Letter(word[i], Vector2Int.zero));
+            Char = @char;
+            Pos = pos;
+            IsNew = isNew;
         }
 
-        Cache();
-    }
-
-    public void Cache()
-    {
-        _word = ToString();
-    }
-
-    public object Clone()
-    {
-        var clone = new Word();
-
-        foreach (var letter in Letters)
+        public object Clone()
         {
-            clone.Letters.Add((Letter)letter.Clone());
+            return new Letter(Char, Pos, IsNew);
+        }
+    }
+
+    public class Word : ICloneable
+    {
+        private string _word;
+        public List<Letter> Letters;
+
+        public Word()
+        {
+            Letters = new List<Letter>();
         }
 
-        return clone;
-    }
-
-    public override string ToString()
-    {
-        string result = string.IsNullOrEmpty(_word) ? new string(Letters.Select(l => l.Char).ToArray()) : _word;
-        return result;
-    }
-
-    public override bool Equals(object obj)
-    {
-        if (obj == null)
+        public Word(string word)
         {
-            return false;
+            Letters = new List<Letter>();
+
+            for (int i = 0; i < word.Length; i++)
+            {
+                Letters.Add(new Letter(word[i], Vector2Int.zero));
+            }
+
+            Cache();
         }
 
-        if (obj is not Word)
+        public void Cache()
         {
-            return false;
+            _word = ToString();
         }
 
-        return ToString().Equals(obj.ToString());
-    }
+        public object Clone()
+        {
+            var clone = new Word();
 
-    public override int GetHashCode()
-    {
-        return ToString().GetHashCode();
+            foreach (var letter in Letters)
+            {
+                clone.Letters.Add((Letter)letter.Clone());
+            }
+
+            return clone;
+        }
+
+        public override string ToString()
+        {
+            string result = string.IsNullOrEmpty(_word) ? new string(Letters.Select(l => l.Char).ToArray()) : _word;
+            return result;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            if (obj is not Word)
+            {
+                return false;
+            }
+
+            return ToString().Equals(obj.ToString());
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
     }
 }

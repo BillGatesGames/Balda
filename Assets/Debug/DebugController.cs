@@ -5,68 +5,71 @@ using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 
-public class DebugController : MonoBehaviour
+namespace Balda
 {
-    [SerializeField]
-    private Transform _cellParent;
-
-    [SerializeField]
-    private DebugCell _cellPrefab;
-
-    public void CreateCell(Vector2 pos, string text, Color color)
+    public class DebugController : MonoBehaviour
     {
-        var cell = Instantiate(_cellPrefab, _cellParent);
-        var rect = cell.GetComponent<RectTransform>();
-        rect.anchoredPosition = pos;
+        [SerializeField]
+        private Transform _cellParent;
 
-        cell.SetText(text);
-        cell.SetColor(color);
-    }
+        [SerializeField]
+        private DebugCell _cellPrefab;
 
-    public void Clear()
-    {
-        var cells = FindObjectsOfType<DebugCell>().ToList();
-        foreach (var cell in cells)
+        public void CreateCell(Vector2 pos, string text, Color color)
         {
-            Destroy(cell.gameObject);
+            var cell = Instantiate(_cellPrefab, _cellParent);
+            var rect = cell.GetComponent<RectTransform>();
+            rect.anchoredPosition = pos;
+
+            cell.SetText(text);
+            cell.SetColor(color);
         }
-    }
 
-    public void ShowTraversal(IList<Word> words, Func<Word, bool> wordExists, Func<Vector2Int, Cell> getCell)
-    {
-        StartCoroutine(StartTraversal(words, wordExists, getCell));
-    }
-
-    private IEnumerator StartTraversal(IList<Word> words, Func<Word, bool> wordExists, Func<Vector2Int, Cell> getCell)
-    {
-        foreach (Word word in words)
+        public void Clear()
         {
-            yield return null;
-            yield return null;
-
-            Clear();
-
-            Color color = wordExists(word) ? Color.green : Color.red;
-
-            for (int i = 0; i < word.Letters.Count; i++)
+            var cells = FindObjectsOfType<DebugCell>().ToList();
+            foreach (var cell in cells)
             {
-                var letter = word.Letters[i];
-                var cell = getCell(letter.Pos);
-                var rect = cell.GetComponent<RectTransform>();
-                CreateCell(rect.position, letter.Char.ToString(), i == 0 ? Color.cyan : color);
+                Destroy(cell.gameObject);
             }
         }
 
-        Clear();
-    }
+        public void ShowTraversal(IList<Word> words, Func<Word, bool> wordExists, Func<Vector2Int, Cell> getCell)
+        {
+            StartCoroutine(StartTraversal(words, wordExists, getCell));
+        }
 
-    void Start()
-    {
-        
-    }
+        private IEnumerator StartTraversal(IList<Word> words, Func<Word, bool> wordExists, Func<Vector2Int, Cell> getCell)
+        {
+            foreach (Word word in words)
+            {
+                yield return null;
+                yield return null;
 
-    void Update()
-    {
-        
+                Clear();
+
+                Color color = wordExists(word) ? Color.green : Color.red;
+
+                for (int i = 0; i < word.Letters.Count; i++)
+                {
+                    var letter = word.Letters[i];
+                    var cell = getCell(letter.Pos);
+                    var rect = cell.GetComponent<RectTransform>();
+                    CreateCell(rect.position, letter.Char.ToString(), i == 0 ? Color.cyan : color);
+                }
+            }
+
+            Clear();
+        }
+
+        void Start()
+        {
+
+        }
+
+        void Update()
+        {
+
+        }
     }
 }

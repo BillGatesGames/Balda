@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Error
+namespace Balda
 {
-    WordNotExists,
-    WordNotFound
+    public enum Error
+    {
+        WordNotExists,
+        WordNotFound
+    }
 }

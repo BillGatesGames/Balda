@@ -4,166 +4,169 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class FieldPresenter : IFieldPresenter
+namespace Balda
 {
-    public event Action<Cell> OnCellClick;
-    public event Action OnEnemyMoveComplete;
-
-    private IFieldView _view;
-    private IFieldModel _model;
-
-    public FieldPresenter(IFieldModel model, IFieldView view)
+    public class FieldPresenter : IFieldPresenter
     {
-        _model = model;
+        public event Action<Cell> OnCellClick;
+        public event Action OnEnemyMoveComplete;
 
-        _view = view;
-        _view.Init(this);
+        private IFieldView _view;
+        private IFieldModel _model;
 
-        EventBus.Register(this);
-    }
-
-    public IFieldModel GetModel()
-    {
-        return _model;
-    }
-
-    public IFieldView GetView()
-    {
-        return _view;
-    }
-
-    public void SetChar(Vector2Int pos, char @char, bool selected = false)
-    {
-        _model.SetChar(pos, @char);
-
-        if (selected)
+        public FieldPresenter(IFieldModel model, IFieldView view)
         {
-            _model.Select(pos);
+            _model = model;
+
+            _view = view;
+            _view.Init(this);
+
+            EventBus.Register(this);
         }
 
-        _view.UpdateView(_model.GetField());
-        _view.UpdateSelection(_model.Selection);
-    }
-
-    public void CellClick(Cell cell)
-    {
-        if (_model.IsLocked)
+        public IFieldModel GetModel()
         {
-            return;
+            return _model;
         }
 
-        Vector2Int? pos = new Vector2Int(cell.X, cell.Y);
-
-        switch (_model.SelectionMode)
+        public IFieldView GetView()
         {
-            case SelectionMode.Single:
-                {
-                    if (_model.Selection.Count == 1 && _model.LastCharPos != pos.Value)
+            return _view;
+        }
+
+        public void SetChar(Vector2Int pos, char @char, bool selected = false)
+        {
+            _model.SetChar(pos, @char);
+
+            if (selected)
+            {
+                _model.Selection.Select(pos);
+            }
+
+            _view.UpdateView(_model.GetField());
+            _view.UpdateSelection(_model.Selection.Positions);
+        }
+
+        public void CellClick(Cell cell)
+        {
+            if (_model.IsLocked)
+            {
+                return;
+            }
+
+            Vector2Int? pos = new Vector2Int(cell.X, cell.Y);
+
+            switch (_model.Selection.Mode)
+            {
+                case SelectionMode.Single:
                     {
-                        _model.DeleteLastChar();
-                        _view.UpdateView(_model.GetField());
+                        if (_model.Selection.Positions.Count == 1 && _model.LastCharPos != pos.Value)
+                        {
+                            _model.DeleteLastChar();
+                            _view.UpdateView(_model.GetField());
 
-                        if (!_model.CanSelect(pos.Value))
+                            if (!_model.Selection.CanSelect(pos.Value))
+                            {
+                                pos = null;
+                            }
+                        }
+                        else if (!_model.Selection.CanSelect(pos.Value) || !_model.IsEmpty(pos.Value))
                         {
                             pos = null;
                         }
-                    }
-                    else if (!_model.CanSelect(pos.Value) || !_model.IsEmpty(pos.Value))
-                    {
-                        pos = null;
-                    }
 
-                    if (pos == null)
+                        if (pos == null)
+                        {
+                            _model.DeleteLastChar();
+                            _view.UpdateView(_model.GetField());
+                        }
+
+                        _model.Selection.Select(pos);
+                    }
+                    break;
+                case SelectionMode.Multiple:
                     {
+                        if (!_model.Selection.CanSelect(pos.Value))
+                        {
+                            pos = null;
+                        }
+
+                        _model.Selection.Select(pos);
+                    }
+                    break;
+            }
+
+            _view.UpdateSelection(_model.Selection.Positions);
+
+            OnCellClick?.Invoke(cell);
+        }
+
+        private void ClearSelection()
+        {
+            _model.Selection.Clear();
+            _view.UpdateSelection(_model.Selection.Positions);
+        }
+
+        public void SwitchToState(StateData data)
+        {
+            switch (data.State)
+            {
+                case State.Init:
+                    {
+                        _view.UpdateView(_model.GetField());
+                    }
+                    break;
+                case State.Player1Move:
+                case State.Player2Move:
+                    {
+                        _model.IsLocked = data.InputLocking;
+
+                        SwitchToSubState(data.SubState);
+                        ClearSelection();
+                    }
+                    break;
+                case State.Finish:
+                    {
+                        ClearSelection();
+                    }
+                    break;
+            }
+        }
+
+        public void SwitchToSubState(SubState state)
+        {
+            switch (state)
+            {
+                case SubState.LetterSelection:
+                    {
+                        _model.Selection.Mode = SelectionMode.Single;
                         _model.DeleteLastChar();
                         _view.UpdateView(_model.GetField());
                     }
-
-                    _model.Select(pos);
-                }
-                break;
-            case SelectionMode.Multiple:
-                {
-                    if (!_model.CanSelect(pos.Value))
+                    break;
+                case SubState.WordSelection:
                     {
-                        pos = null;
+                        _model.Selection.Mode = SelectionMode.Multiple;
                     }
-
-                    _model.Select(pos);
-                }
-                break;
+                    break;
+            }
         }
 
-        _view.UpdateSelection(_model.Selection);
-
-        OnCellClick?.Invoke(cell);
-    }
-
-    private void ClearSelection()
-    {
-        _model.ClearSelection();
-        _view.UpdateSelection(_model.Selection);
-    }
-
-    public void SwitchToState(StateData data)
-    {
-        switch (data.State)
+        public IEnumerator ShowWord(Word word, float delay, Action callback)
         {
-            case State.Init: 
-                {
-                    _view.UpdateView(_model.GetField());
-                }
-                break;
-            case State.Player1Move:
-            case State.Player2Move:
-                {
-                    _model.IsLocked = data.InputLocking;
+            foreach (var letter in word.Letters)
+            {
+                yield return new WaitForSeconds(delay);
 
-                    SwitchToSubState(data.SubState);
-                    ClearSelection();
-                }
-                break;
-            case State.Finish:
-                {
-                    ClearSelection();
-                }
-                break;
-        }
-    }
+                _model.Selection.Select(letter.Pos);
+                _view.UpdateSelection(_model.Selection.Positions);
+            }
 
-    public void SwitchToSubState(SubState state)
-    {
-        switch (state)
-        {
-            case SubState.LetterSelection:
-                {
-                    _model.SelectionMode = SelectionMode.Single;
-                    _model.DeleteLastChar();
-                    _view.UpdateView(_model.GetField());
-                }
-                break;
-            case SubState.WordSelection:
-                {
-                    _model.SelectionMode = SelectionMode.Multiple;
-                }
-                break;
-        }
-    }
+            _model.TrySetSelectedWord();
 
-    public IEnumerator ShowWord(Word word, float delay, Action callback)
-    {
-        foreach (var letter in word.Letters)
-        {
             yield return new WaitForSeconds(delay);
 
-            _model.Select(letter.Pos);
-            _view.UpdateSelection(_model.Selection);
+            callback?.Invoke();
         }
-
-        _model.TrySetSelectedWord();
-
-        yield return new WaitForSeconds(delay);
-
-        callback?.Invoke();
     }
 }

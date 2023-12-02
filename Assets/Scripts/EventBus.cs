@@ -4,66 +4,68 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
-public static class EventBus
+namespace Balda
 {
-    private static Dictionary<Type, List<IHandler>> _handlers = new Dictionary<Type, List<IHandler>>();
-
-    public static void Register(IHandler handler)
+    public static class EventBus
     {
-        var types = GetHandlersTypes(handler);
+        private static Dictionary<Type, List<IHandler>> _handlers = new Dictionary<Type, List<IHandler>>();
 
-        foreach (var type in types)
+        public static void Register(IHandler handler)
         {
+            var types = GetHandlersTypes(handler);
+
+            foreach (var type in types)
+            {
+                if (!_handlers.ContainsKey(type))
+                {
+                    _handlers.Add(type, new List<IHandler>());
+                }
+
+                _handlers[type].Add(handler);
+            }
+        }
+
+        public static void Unregister(IHandler handler)
+        {
+            var types = GetHandlersTypes(handler);
+
+            foreach (var type in types)
+            {
+                if (_handlers.ContainsKey(type))
+                {
+                    _handlers.Remove(type);
+                }
+            }
+        }
+
+        public static void RaiseEvent<THandler>(Action<THandler> action) where THandler : IHandler
+        {
+            var type = typeof(THandler);
+
             if (!_handlers.ContainsKey(type))
             {
-                _handlers.Add(type, new List<IHandler>());
+                Debug.LogError($"Handlers of {type} not found");
+                return;
             }
 
-            _handlers[type].Add(handler);
-        }
-    }
+            var handlers = _handlers[type];
 
-    public static void Unregister(IHandler handler)
-    {
-        var types = GetHandlersTypes(handler);
-
-        foreach (var type in types)
-        {
-            if (_handlers.ContainsKey(type))
+            foreach (IHandler handler in handlers)
             {
-                _handlers.Remove(type);
+                try
+                {
+                    action.Invoke((THandler)handler);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogException(ex);
+                }
             }
         }
-    }
 
-    public static void RaiseEvent<THandler>(Action<THandler> action) where THandler : IHandler
-    {
-        var type = typeof(THandler);
-
-        if (!_handlers.ContainsKey(type))
+        private static List<Type> GetHandlersTypes(IHandler handler)
         {
-            Debug.LogError($"Handlers of {type} not found");
-            return;
+            return handler.GetType().GetInterfaces().ToList();
         }
-
-        var handlers = _handlers[type];
-
-        foreach (IHandler handler in handlers)
-        {
-            try
-            {
-                action.Invoke((THandler)handler);
-            }
-            catch (Exception ex)
-            {
-                Debug.LogException(ex);
-            }
-        }
-    }
-
-    private static List<Type> GetHandlersTypes(IHandler handler)
-    {
-        return handler.GetType().GetInterfaces().ToList();
     }
 }

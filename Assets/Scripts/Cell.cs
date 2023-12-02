@@ -5,60 +5,62 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Cell : MonoBehaviour
+namespace Balda
 {
-    public Action<Cell> OnClick;
-
-    [SerializeField]
-    private TextMeshProUGUI _text;
-
-    [SerializeField]
-    private Button _button;
-
-    [SerializeField]
-    private Image _image;
-
-    [SerializeField]
-    private Color _normalColor;
-
-    [SerializeField]
-    private Color _selectedColor;
-
-    public int X;
-    public int Y;
-
-    private char? _char;
-
-    public char? Char
+    public class Cell : MonoBehaviour
     {
-        set
+        public Action<Cell> OnClick;
+
+        [SerializeField]
+        private TextMeshProUGUI _text;
+
+        [SerializeField]
+        private Button _button;
+
+        [SerializeField]
+        private Image _image;
+
+        [SerializeField]
+        private Color _normalColor;
+
+        [SerializeField]
+        private Color _selectedColor;
+
+        public int X;
+        public int Y;
+
+        private char? _char;
+
+        public char? Char
         {
-            if (value == null)
+            set
             {
-                _text.text = string.Empty;
-            }
-            else
-            {
-                _text.text = value.Value.ToString();
+                if (value == null)
+                {
+                    _text.text = string.Empty;
+                }
+                else
+                {
+                    _text.text = value.Value.ToString();
+                }
+
+                _char = value;
             }
 
-            _char = value;
+            get
+            {
+                return _char;
+            }
         }
 
-        get
+        public void Select(bool selected)
         {
-            return _char;
+            _image.color = selected ? _selectedColor : _normalColor;
+        }
+
+        void Start()
+        {
+            _button.onClick.AddListener(() => OnClick?.Invoke(this));
         }
     }
-
-    public void Select(bool selected)
-    {
-        _image.color = selected ? _selectedColor : _normalColor;
-    }
-
-    void Start()
-    {
-        _button.onClick.AddListener(() => OnClick?.Invoke(this));
-    }
-
 }

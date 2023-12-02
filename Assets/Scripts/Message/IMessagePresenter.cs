@@ -9,7 +9,7 @@ namespace Balda
     {
         event Action OnOkClick;
         event Action OnResetClick;
-        void OkClick();
-        void ResetClick();
+        void LeftBtnClick();
+        void RightBtnClick();
     }
 }

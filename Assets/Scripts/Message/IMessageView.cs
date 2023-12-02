@@ -8,7 +8,7 @@ namespace Balda
     public interface IMessageView
     {
         void Init(IMessagePresenter presenter);
-        void Show(string text);
+        void SetData(MessageData data);
         void Hide();
     }
 }

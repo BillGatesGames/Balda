@@ -125,7 +125,7 @@ namespace Balda
                         ClearSelection();
                     }
                     break;
-                case State.Finish:
+                case State.Completed:
                     {
                         ClearSelection();
                     }

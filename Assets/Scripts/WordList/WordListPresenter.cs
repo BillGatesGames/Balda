@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Balda
@@ -25,6 +26,11 @@ namespace Balda
             _model.Words.Add(text);
 
             UpdateView();
+        }
+
+        public int GetScore()
+        {
+            return _model.Words.Sum(w => w.Length);
         }
 
         public void SwitchToState(StateData data)

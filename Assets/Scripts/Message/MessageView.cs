@@ -15,10 +15,16 @@ namespace Balda
         private TextMeshProUGUI _text;
 
         [SerializeField]
-        private Button _OkBtn;
+        private Button _leftBtn;
 
         [SerializeField]
-        private Button _resetBtn;
+        private Button _rightBtn;
+
+        [SerializeField]
+        private TextMeshProUGUI _leftBtnText;
+
+        [SerializeField]
+        private TextMeshProUGUI _rightBtnText;
 
         private IMessagePresenter _presenter;
 
@@ -32,16 +38,21 @@ namespace Balda
             _gameObject.SetActive(false);
         }
 
-        public void Show(string text)
+        public void SetData(MessageData data)
         {
-            _text.text = text;
-            _gameObject.SetActive(true);
+            _text.text = data.Message.Text;
+            _leftBtnText.text = data.LeftButton.Text;
+            _rightBtnText.text = data.RightButton.Text;
+
+            _leftBtn.gameObject.SetActive(data.LeftButton.Active);
+            _rightBtn.gameObject.SetActive(data.RightButton.Active);
+            _gameObject.SetActive(data.Message.Active);
         }
 
         void Start()
         {
-            _OkBtn.onClick.AddListener(() => _presenter.OkClick());
-            _resetBtn.onClick.AddListener(() => _presenter.ResetClick());
+            _leftBtn.onClick.AddListener(() => _presenter.LeftBtnClick());
+            _rightBtn.onClick.AddListener(() => _presenter.RightBtnClick());
         }
     }
 }

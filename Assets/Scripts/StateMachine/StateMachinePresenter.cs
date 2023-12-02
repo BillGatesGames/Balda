@@ -67,7 +67,7 @@ namespace Balda
         {
             if (error == Error.WordNotFound)
             {
-                SwitchToState(State.Finish, SubState.None);
+                SwitchToState(State.Completed, SubState.None);
             }
         }
 
@@ -75,7 +75,7 @@ namespace Balda
         {
             if (_field.GetModel().IsFilled)
             {
-                SwitchToState(State.Finish, SubState.None);
+                SwitchToState(State.Completed, SubState.None);
                 return;
             }
 

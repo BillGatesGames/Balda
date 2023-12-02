@@ -22,12 +22,12 @@ namespace Balda
             EventBus.Register(this);
         }
 
-        public void OkClick()
+        public void LeftBtnClick()
         {
             OnOkClick?.Invoke();
         }
 
-        public void ResetClick()
+        public void RightBtnClick()
         {
             OnResetClick?.Invoke();
         }
@@ -37,7 +37,6 @@ namespace Balda
             switch (data.State)
             {
                 case State.Init:
-                case State.Finish:
                     {
                         _view.Hide();
                     }
@@ -50,13 +49,18 @@ namespace Balda
                             return;
                         }
 
+                        _view.SetData(_model.GetMessageData(data));
+
                         if (data.InputLocking)
                         {
                             _view.Hide();
                             return;
                         }
-
-                        _view.Show(_model.GetMessageText(data.SubState));
+                    }
+                    break;
+                case State.Completed:
+                    {
+                        _view.SetData(_model.GetMessageData(data));
                     }
                     break;
             }

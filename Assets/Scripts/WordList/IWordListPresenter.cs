@@ -7,5 +7,6 @@ namespace Balda
     public interface IWordListPresenter : IStateHandler
     {
         void AddWord(string text);
+        int GetScore();
     }
 }

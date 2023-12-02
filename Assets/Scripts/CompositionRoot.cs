@@ -21,6 +21,10 @@ namespace Balda
         [SerializeField]
         private WordListView _wordListRightView;
 
+        [Header("Debug")]
+        [SerializeField]
+        private bool _firstPlayerIsHuman;
+
         void Start()
         {
             var field = new FieldPresenter(new FieldModel(), _fieldView);
@@ -32,17 +36,23 @@ namespace Balda
 
             var stateMachineModel = new StateMachineModel();
 
-            /*
-            var player1 = new Human(field, alphabet, message, wordList1, () =>
-            {
-                return (stateMachineModel.State, stateMachineModel.SubState);
-            });
-            */
+            IPlayer player1 = null;
 
-            var player1 = new AI(field, wordList1);
+            if (_firstPlayerIsHuman)
+            {
+                player1 = new Human(field, alphabet, message, wordList1, () =>
+                {
+                    return (stateMachineModel.State, stateMachineModel.SubState);
+                });
+            }
+            else
+            {
+                player1 = new AI(field, wordList1);
+            }
+
             var player2 = new AI(field, wordList2);
 
-            var stateMachinePresenter = new StateMachinePresenter(player1, player2, field, stateMachineModel);
+            var stateMachine = new StateMachinePresenter(player1, player2, field, stateMachineModel);
         }
     }
 }

@@ -6,7 +6,6 @@ namespace Balda
 {
     public interface IMessageModel
     {
-        string GetMessageText(SubState state);
-        string GetButtonText();
+        MessageData GetMessageData(StateData data);
     }
 }

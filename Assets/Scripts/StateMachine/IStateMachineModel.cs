@@ -9,7 +9,7 @@ namespace Balda
         Init,
         Player1Move,
         Player2Move,
-        Finish
+        Completed
     }
 
     public enum SubState

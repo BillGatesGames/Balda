@@ -32,8 +32,8 @@ namespace Balda
             _stateProvider = stateProvider;
 
             _alphabet.OnCellClick += Alphabet_OnCellClick;
-            _message.OnOkClick += Message_OnOKClick;
-            _message.OnResetClick += Message_OnResetClick;
+            _message.OnLeftButtonClick += Message_OnLeftButtonClick;
+            _message.OnRightButtonClick += Message_OnRightButtonClick;
         }
 
         private void Alphabet_OnCellClick(Cell cell)
@@ -48,7 +48,7 @@ namespace Balda
             }
         }
 
-        private void Message_OnOKClick()
+        private void Message_OnLeftButtonClick()
         {
             switch (_stateProvider().SubState)
             {
@@ -79,7 +79,7 @@ namespace Balda
         }
 
 
-        private void Message_OnResetClick()
+        private void Message_OnRightButtonClick()
         {
             if (_stateProvider().SubState != SubState.None)
             {

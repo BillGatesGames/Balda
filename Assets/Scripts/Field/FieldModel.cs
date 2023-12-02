@@ -62,6 +62,11 @@ namespace Balda
 
         public FieldModel()
         {
+            Init();
+        }
+
+        public void Init()
+        {
             int size = GetSize();
 
             if (size % 2 == 0)

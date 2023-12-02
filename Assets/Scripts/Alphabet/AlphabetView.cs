@@ -65,6 +65,8 @@ namespace Balda
             var cell = Instantiate(_cellPrefab, _cellParent);
             cell.Char = @char;
             cell.OnClick = LetterClick;
+
+            _cells.Add(cell);
         }
 
         private void Clear()

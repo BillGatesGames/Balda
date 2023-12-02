@@ -13,6 +13,7 @@ namespace Balda
         Trie GetTrie();
         char?[,] GetField();
         int GetSize();
+        void Init();
         void SetChar(Vector2Int pos, char @char);
         bool TrySetSelectedWord();
         bool IsEmpty(Vector2Int pos);

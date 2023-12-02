@@ -7,8 +7,8 @@ namespace Balda
 {
     public class MessagePresenter : IMessagePresenter
     {
-        public event Action OnOkClick;
-        public event Action OnResetClick;
+        public event Action OnLeftButtonClick;
+        public event Action OnRightButtonClick;
 
         private IMessageModel _model;
         private IMessageView _view;
@@ -24,12 +24,12 @@ namespace Balda
 
         public void LeftBtnClick()
         {
-            OnOkClick?.Invoke();
+            OnLeftButtonClick?.Invoke();
         }
 
         public void RightBtnClick()
         {
-            OnResetClick?.Invoke();
+            OnRightButtonClick?.Invoke();
         }
 
         public void SwitchToState(StateData data)

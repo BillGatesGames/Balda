@@ -7,8 +7,8 @@ namespace Balda
 {
     public interface IMessagePresenter : IStateHandler
     {
-        event Action OnOkClick;
-        event Action OnResetClick;
+        event Action OnLeftButtonClick;
+        event Action OnRightButtonClick;
         void LeftBtnClick();
         void RightBtnClick();
     }

@@ -14,7 +14,7 @@ namespace Balda
             Words = new List<string>();
         }
 
-        public void Clear()
+        public void Init()
         {
             Words.Clear();
         }

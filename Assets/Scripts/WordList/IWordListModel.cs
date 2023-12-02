@@ -8,6 +8,6 @@ namespace Balda
     {
         List<string> Words { get; }
         string GetTotalText();
-        void Clear();
+        void Init();
     }
 }

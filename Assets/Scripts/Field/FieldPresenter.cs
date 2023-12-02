@@ -113,6 +113,7 @@ namespace Balda
             {
                 case State.Init:
                     {
+                        _model.Init();
                         _view.UpdateView(_model.GetField());
                     }
                     break;

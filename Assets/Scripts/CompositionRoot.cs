@@ -52,7 +52,7 @@ namespace Balda
 
             var player2 = new AI(field, wordList2);
 
-            var stateMachine = new StateMachinePresenter(player1, player2, field, stateMachineModel);
+            var stateMachine = new StateMachinePresenter(player1, player2, field, message, stateMachineModel);
         }
     }
 }

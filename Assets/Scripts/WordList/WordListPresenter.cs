@@ -39,7 +39,7 @@ namespace Balda
             {
                 case State.Init:
                     {
-                        _model.Clear();
+                        _model.Init();
                     }
                     break;
             }

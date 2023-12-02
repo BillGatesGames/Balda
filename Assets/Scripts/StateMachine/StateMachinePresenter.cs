@@ -23,16 +23,21 @@ namespace Balda
     {
         private IStateMachineModel _model;
         private IFieldPresenter _field;
+        private IMessagePresenter _message;
 
         private IPlayer _player1;
         private IPlayer _player2;
 
         private StateMachinePresenter() { }
 
-        public StateMachinePresenter(IPlayer player1, IPlayer player2, IFieldPresenter field, IStateMachineModel model)
+        public StateMachinePresenter(IPlayer player1, IPlayer player2, IFieldPresenter field, IMessagePresenter message, IStateMachineModel model)
         {
             _field = field;
             _model = model;
+
+            _message = message;
+            _message.OnLeftButtonClick += Message_OnButtonClick;
+            _message.OnRightButtonClick += Message_OnButtonClick;
 
             _player1 = player1;
             _player2 = player2;
@@ -50,7 +55,14 @@ namespace Balda
             _player2.OnMoveCompleted += Player_OnMoveCompleted;
 
             SwitchToInitState();
-            SwitchToPlayer1MoveState();
+        }
+
+        private void Message_OnButtonClick()
+        {
+            if (_model.State == State.Completed)
+            {
+                SwitchToInitState();
+            }
         }
 
         private void Player_OnResetMoveState(IPlayer player)
@@ -107,6 +119,7 @@ namespace Balda
         private void SwitchToInitState()
         {
             SwitchToState(State.Init, SubState.None);
+            SwitchToPlayer1MoveState();
         }
 
         private void SwitchToPlayer1MoveState()
@@ -135,11 +148,6 @@ namespace Balda
             {
                 h.SwitchToState(data);
             });
-        }
-
-        public void SwitchToState(StateData data)
-        {
-
         }
     }
 }

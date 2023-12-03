@@ -35,7 +35,8 @@ namespace Balda
 
         private HashSet<string> GetWordsList()
         {
-            var asset = Resources.Load(LocalizationManager.Instance.GetDictionaryFileName()) as TextAsset;
+            string fileName = LocalizationManager.Instance.GetDictionaryFileName();
+            var asset = Resources.Load(fileName) as TextAsset;
             var words = asset.text.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).ToList();
             return new HashSet<string>(words);
         }

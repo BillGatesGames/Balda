@@ -28,6 +28,8 @@ namespace Balda
         private IPlayer _player1;
         private IPlayer _player2;
 
+        private SubState? _lastError;
+
         private StateMachinePresenter() { }
 
         public StateMachinePresenter(IPlayer player1, IPlayer player2, IFieldPresenter field, IMessagePresenter message, IStateMachineModel model)
@@ -59,9 +61,29 @@ namespace Balda
 
         private void Message_OnButtonClick()
         {
-            if (_model.State == State.Completed)
+            if (_lastError.HasValue)
             {
-                SwitchToInitState();
+                if (_lastError == SubState.WordNotFound)
+                {
+                    SwitchToState(State.Completed, _lastError.Value);                
+                }
+                else if (_lastError == SubState.WordNotExists)
+                {
+                    SwitchToState(_model.State, _lastError.Value);
+                }
+
+                _lastError = null;
+            }
+            else
+            {
+                if (_model.State == State.Completed)
+                {
+                    SwitchToInitState();
+                }
+                else if (_model.SubState == SubState.WordNotExists)
+                {
+                    SwitchToState(_model.State, SubState.LetterSelection);
+                }
             }
         }
 
@@ -75,12 +97,9 @@ namespace Balda
             SwitchToState(_model.State, SubState.WordSelection);
         }
 
-        private void Player_OnError(IPlayer player, Error error)
+        private void Player_OnError(IPlayer player, SubState error)
         {
-            if (error == Error.WordNotFound)
-            {
-                SwitchToState(State.Completed, SubState.None);
-            }
+            _lastError = error;
         }
 
         private void Player_OnMoveCompleted(IPlayer player)

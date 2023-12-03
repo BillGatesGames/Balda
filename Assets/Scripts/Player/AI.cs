@@ -43,7 +43,7 @@ namespace Balda
         public event Action<IPlayer> OnLetterSet;
         public event Action<IPlayer> OnMoveCompleted;
         public event Action<IPlayer> OnResetMoveState;
-        public event Action<IPlayer, Error> OnError;
+        public event Action<IPlayer, SubState> OnError;
 
         private IFieldPresenter _field;
         private IWordListPresenter _wordList;
@@ -99,7 +99,7 @@ namespace Balda
             }
             else
             {
-                OnError?.Invoke(this, Error.WordNotFound);
+                OnError?.Invoke(this, SubState.WordNotFound);
             }
         }
 

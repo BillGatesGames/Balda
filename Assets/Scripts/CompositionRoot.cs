@@ -29,6 +29,10 @@ namespace Balda
 
         public void Build()
         {
+            #if !UNITY_EDITOR
+             _firstPlayerIsHuman = false;
+            #endif
+
             var field = new FieldPresenter(new FieldModel(), _fieldView);
             var alphabet = new AlphabetPresenter(new AlphabetModel(), _alphabetView);
             var message = new MessagePresenter(new MessageModel(), _messageView);

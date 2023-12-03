@@ -31,12 +31,20 @@
       "RU": "Игра завершена"
     },
     "add_new_letter": {
-      "EN": "Add a new letter to form a new word",
-      "RU": "Добавьте новую букву, чтобы она образовывала новое слово"
+      "EN": "Add a letter to form a new word",
+      "RU": "Добавьте букву, чтобы она образовывала новое слово"
     },
     "select_word": {
       "EN": "Choose each letter of the new word one by one",
       "RU": "Поочередно выберите каждую букву нового слова"
-    }
+    },
+    "word_not_found": {
+      "EN": "Game completed. The enemy couldn't find a word",
+      "RU": "Игра завершена. Противник не смог найти новое слово"
+    },
+    "word_not_exists": {
+      "EN": "The dictionary does not contain the highlighted word",
+      "RU": "В словаре не содержится выделенное слово"
+    },
   }
 }

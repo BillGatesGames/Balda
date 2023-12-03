@@ -16,7 +16,10 @@ namespace Balda
     {
         None,
         LetterSelection,
-        WordSelection
+        WordSelection,
+        //errors
+        WordNotExists,
+        WordNotFound
     }
 
     public interface IStateMachineModel

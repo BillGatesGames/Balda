@@ -4,35 +4,35 @@ using UnityEngine;
 
 namespace Balda
 {
-    public class MessageData
+    public class MessageItemData
     {
-        public class ItemData
+        public string Alias;
+        public bool Active = true;
+
+        public MessageItemData(string alias, bool active)
         {
-            public string Alias;
-            public bool Active = true;
-
-            public ItemData(string alias, bool active)
-            {
-                Alias = alias;
-                Active = active;
-            }
-
-            public ItemData(bool active)
-            {
-                Alias = string.Empty;
-                Active = active;
-            }
+            Alias = alias;
+            Active = active;
         }
 
-        public ItemData Message;
-        public ItemData LeftButton;
-        public ItemData RightButton;
+        public MessageItemData(bool active)
+        {
+            Alias = string.Empty;
+            Active = active;
+        }
+    }
+
+    public class MessageData
+    {
+        public MessageItemData Message;
+        public MessageItemData LeftButton;
+        public MessageItemData RightButton;
 
         public MessageData()
         {
-            Message = new ItemData(true);
-            LeftButton = new ItemData(true);
-            RightButton = new ItemData(true);
+            Message = new MessageItemData(true);
+            LeftButton = new MessageItemData(true);
+            RightButton = new MessageItemData(true);
         }
     }
 
@@ -47,15 +47,15 @@ namespace Balda
                 case State.Init:
                     {
                         message.Message.Active = false;
-                        message.LeftButton = new MessageData.ItemData("ok", true);
-                        message.RightButton = new MessageData.ItemData("reset", true);
+                        message.LeftButton = new MessageItemData("ok", true);
+                        message.RightButton = new MessageItemData("reset", true);
                     }
                     break;
                 case State.Completed:
                     {
-                        message.Message = new MessageData.ItemData("game_completed", true);
-                        message.LeftButton = new MessageData.ItemData("restart", true);
-                        message.RightButton = new MessageData.ItemData(false);
+                        message.Message = new MessageItemData("game_completed", true);
+                        message.LeftButton = new MessageItemData("restart", true);
+                        message.RightButton = new MessageItemData(false);
                     }
                     break;
             }
@@ -64,16 +64,30 @@ namespace Balda
             {
                 case SubState.LetterSelection:
                     {
-                        message.Message = new MessageData.ItemData("add_new_letter", true);
-                        message.LeftButton = new MessageData.ItemData("ok", true);
-                        message.RightButton = new MessageData.ItemData("reset", true);
+                        message.Message = new MessageItemData("add_new_letter", true);
+                        message.LeftButton = new MessageItemData("ok", true);
+                        message.RightButton = new MessageItemData("reset", true);
                     }
                     break;
                 case SubState.WordSelection:
                     {
-                        message.Message = new MessageData.ItemData("select_word", true);
-                        message.LeftButton = new MessageData.ItemData("ok", true);
-                        message.RightButton = new MessageData.ItemData("reset", true);
+                        message.Message = new MessageItemData("select_word", true);
+                        message.LeftButton = new MessageItemData("ok", true);
+                        message.RightButton = new MessageItemData("reset", true);
+                    }
+                    break;
+                case SubState.WordNotFound:
+                    {
+                        message.Message = new MessageItemData("word_not_found", true);
+                        message.LeftButton = new MessageItemData("restart", true);
+                        message.RightButton = new MessageItemData(false);
+                    }
+                    break;
+                case SubState.WordNotExists:
+                    {
+                        message.Message = new MessageItemData("word_not_exists", true);
+                        message.LeftButton = new MessageItemData("ok", true);
+                        message.RightButton = new MessageItemData(false);
                     }
                     break;
             }

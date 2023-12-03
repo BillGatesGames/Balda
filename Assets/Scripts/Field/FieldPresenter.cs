@@ -123,7 +123,11 @@ namespace Balda
                         _model.IsLocked = data.InputLocking;
 
                         SwitchToSubState(data.SubState);
-                        ClearSelection();
+
+                        if (data.SubState != SubState.WordNotExists)
+                        {
+                            ClearSelection();
+                        }
                     }
                     break;
                 case State.Completed:
@@ -134,7 +138,7 @@ namespace Balda
             }
         }
 
-        public void SwitchToSubState(SubState state)
+        private void SwitchToSubState(SubState state)
         {
             switch (state)
             {

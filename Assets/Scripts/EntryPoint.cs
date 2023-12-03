@@ -12,7 +12,7 @@ namespace Balda
         void Start()
         {
             LocalizationManager.Instance.LoadLocalization();
-            LocalizationManager.Instance.SetLang(Constants.Localization.EN);
+            LocalizationManager.Instance.SetLang(Constants.Localization.RU);
             LocalizationManager.Instance.UpdateLocalization();
 
             _compositionRoot.Build();

@@ -10,8 +10,10 @@ namespace Balda
         public event Action OnLeftButtonClick;
         public event Action OnRightButtonClick;
 
-        private IMessageModel _model;
-        private IMessageView _view;
+        protected IMessageModel _model;
+        protected IMessageView _view;
+
+        private MessagePresenter() { }
 
         public MessagePresenter(IMessageModel model, IMessageView view)
         {
@@ -32,7 +34,7 @@ namespace Balda
             OnRightButtonClick?.Invoke();
         }
 
-        public void SwitchToState(StateData data)
+        public virtual void SwitchToState(StateData data)
         {
             switch (data.State)
             {
@@ -44,23 +46,17 @@ namespace Balda
                 case State.Player1Move:
                 case State.Player2Move:
                     {
-                        if (data.SubState == SubState.None)
-                        {
-                            return;
-                        }
+                        _view.Hide();
 
-                        _view.SetData(_model.GetMessageData(data));
-
-                        if (data.InputLocking)
+                        if (data.SubState == SubState.LetterSelection || data.SubState == SubState.WordSelection)
                         {
-                            _view.Hide();
-                            return;
-                        }
+                            _view.SetData(_model.GetMessageData(data));
+                        } 
                     }
                     break;
                 case State.Completed:
                     {
-                        _view.SetData(_model.GetMessageData(data));
+                        _view.Hide();
                     }
                     break;
             }

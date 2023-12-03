@@ -24,12 +24,14 @@ namespace Balda
 
     public class MessageData
     {
+        public MessageItemData Title;
         public MessageItemData Message;
         public MessageItemData LeftButton;
         public MessageItemData RightButton;
 
         public MessageData()
         {
+            Title = new MessageItemData(false);
             Message = new MessageItemData(true);
             LeftButton = new MessageItemData(true);
             RightButton = new MessageItemData(true);
@@ -78,6 +80,7 @@ namespace Balda
                     break;
                 case SubState.WordNotFound:
                     {
+                        message.Title = new MessageItemData("info", true);
                         message.Message = new MessageItemData("word_not_found", true);
                         message.LeftButton = new MessageItemData("restart", true);
                         message.RightButton = new MessageItemData(false);
@@ -85,6 +88,7 @@ namespace Balda
                     break;
                 case SubState.WordNotExists:
                     {
+                        message.Title = new MessageItemData("error", true);
                         message.Message = new MessageItemData("word_not_exists", true);
                         message.LeftButton = new MessageItemData("ok", true);
                         message.RightButton = new MessageItemData(false);

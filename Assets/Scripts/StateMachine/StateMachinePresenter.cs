@@ -23,23 +23,20 @@ namespace Balda
     {
         private IStateMachineModel _model;
         private IFieldPresenter _field;
-        private IMessagePresenter _message;
+        private IMessagePresenter _popup;
 
         private IPlayer _player1;
         private IPlayer _player2;
 
-        private SubState? _lastError;
-
         private StateMachinePresenter() { }
 
-        public StateMachinePresenter(IPlayer player1, IPlayer player2, IFieldPresenter field, IMessagePresenter message, IStateMachineModel model)
+        public StateMachinePresenter(IPlayer player1, IPlayer player2, IFieldPresenter field, IMessagePresenter popup, IStateMachineModel model)
         {
             _field = field;
             _model = model;
 
-            _message = message;
-            _message.OnLeftButtonClick += Message_OnButtonClick;
-            _message.OnRightButtonClick += Message_OnButtonClick;
+            _popup = popup;
+            _popup.OnLeftButtonClick += Popup_OnLeftButtonClick;
 
             _player1 = player1;
             _player2 = player2;
@@ -59,31 +56,15 @@ namespace Balda
             SwitchToInitState();
         }
 
-        private void Message_OnButtonClick()
+        private void Popup_OnLeftButtonClick()
         {
-            if (_lastError.HasValue)
+            if (_model.State == State.Completed)
             {
-                if (_lastError == SubState.WordNotFound)
-                {
-                    SwitchToState(State.Completed, _lastError.Value);                
-                }
-                else if (_lastError == SubState.WordNotExists)
-                {
-                    SwitchToState(_model.State, _lastError.Value);
-                }
-
-                _lastError = null;
+                SwitchToInitState();
             }
-            else
+            else if (_model.SubState == SubState.WordNotExists)
             {
-                if (_model.State == State.Completed)
-                {
-                    SwitchToInitState();
-                }
-                else if (_model.SubState == SubState.WordNotExists)
-                {
-                    SwitchToState(_model.State, SubState.LetterSelection);
-                }
+                SwitchToState(_model.State, SubState.LetterSelection);
             }
         }
 
@@ -99,7 +80,7 @@ namespace Balda
 
         private void Player_OnError(IPlayer player, SubState error)
         {
-            _lastError = error;
+            SwitchToState(_model.State, error);
         }
 
         private void Player_OnMoveCompleted(IPlayer player)

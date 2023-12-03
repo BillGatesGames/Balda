@@ -30,10 +30,6 @@ namespace Balda
             _message = message;
             _wordList = wordList;
             _stateProvider = stateProvider;
-
-            _alphabet.OnCellClick += Alphabet_OnCellClick;
-            _message.OnLeftButtonClick += Message_OnLeftButtonClick;
-            _message.OnRightButtonClick += Message_OnRightButtonClick;
         }
 
         private void Alphabet_OnCellClick(Cell cell)
@@ -67,6 +63,10 @@ namespace Balda
                             var word = _field.GetModel().Selection.GetWord();
                             _wordList.AddWord(word);
 
+                            _alphabet.OnCellClick -= Alphabet_OnCellClick;
+                            _message.OnLeftButtonClick -= Message_OnLeftButtonClick;
+                            _message.OnRightButtonClick -= Message_OnRightButtonClick;
+
                             OnMoveCompleted?.Invoke(this);
                         }
                         else
@@ -89,7 +89,9 @@ namespace Balda
 
         public void Move()
         {
-
+            _alphabet.OnCellClick += Alphabet_OnCellClick;
+            _message.OnLeftButtonClick += Message_OnLeftButtonClick;
+            _message.OnRightButtonClick += Message_OnRightButtonClick;
         }
     }
 }

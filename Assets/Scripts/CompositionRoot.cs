@@ -59,13 +59,13 @@ namespace Balda
             {
                 player1 = new AI(field, wordList1);
             }
-
+            /*
             var player2 = new Human(field, alphabet, message, wordList2, () =>
             {
                 return (stateMachineModel.State, stateMachineModel.SubState);
             });
-
-            //var player2 = new AI(field, wordList2);
+            */
+            var player2 = new AI(field, wordList2);
 
             var stateMachine = new StateMachinePresenter(player1, player2, field, popup, stateMachineModel);
         }

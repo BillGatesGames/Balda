@@ -48,7 +48,7 @@ namespace Balda
                     {
                         _view.Hide();
 
-                        if (data.SubState == SubState.LetterSelection || data.SubState == SubState.WordSelection)
+                        if (!data.InputLocking && (data.SubState == SubState.LetterSelection || data.SubState == SubState.WordSelection))
                         {
                             _view.SetData(_model.GetMessageData(data));
                         } 

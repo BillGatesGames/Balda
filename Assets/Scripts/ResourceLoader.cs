@@ -52,6 +52,12 @@ namespace Balda
 
         private void Awake()
         {
+            if (_instance != null && _instance != this)
+            {
+                Destroy(this);
+                return;
+            }
+
             Instance = this;
 
             DontDestroyOnLoad(gameObject);

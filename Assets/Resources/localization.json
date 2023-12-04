@@ -10,6 +10,46 @@
     }
   },
   "Localization": {
+    "game_name": {
+      "EN": "Balda",
+      "RU": "Балда"
+    },
+    "language": {
+      "EN": "Language",
+      "RU": "Язык"
+    },
+    "lang_ru": {
+      "EN": "Русский",
+      "RU": "Русский"
+    },
+    "lang_en": {
+      "EN": "English",
+      "RU": "English"
+    },
+    "field_size": {
+      "EN": "Field Size",
+      "RU": "Размер поля"
+    },
+    "player1_type": {
+      "EN": "Player 1",
+      "RU": "Игрок 1"
+    },
+    "player2_type": {
+      "EN": "Player 2",
+      "RU": "Игрок 2"
+    },
+    "player_human": {
+      "EN": "Human",
+      "RU": "Человек"
+    },
+    "player_ai": {
+      "EN": "AI",
+      "RU": "ИИ"
+    },
+    "play": {
+      "EN": "Play",
+      "RU": "Играть"
+    },
     "ok": {
       "EN": "OK",
       "RU": "OK"

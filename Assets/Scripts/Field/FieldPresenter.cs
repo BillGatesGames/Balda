@@ -180,9 +180,6 @@ namespace Balda
         {
             if (!disposedValue)
             {
-                _view = null;
-                _model = null;
-
                 EventBus.Unregister(this);
 
                 disposedValue = true;

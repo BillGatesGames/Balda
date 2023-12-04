@@ -4,17 +4,21 @@ using UnityEngine;
 
 namespace Balda
 {
-    public class EntryPoint : MonoBehaviour
+    public class MenuCompositionRoot : MonoBehaviour
     {
         [SerializeField]
-        private GameCompositionRoot _root;
+        private MenuView _menuView;
+
+        private IMenuPresenter _menu;
 
         void Start()
         {
+            GameSettings.Load();
+            LocalizationManager.Instance.LoadLocalization();
             LocalizationManager.Instance.SetLang(GameSettings.Lang);
             LocalizationManager.Instance.UpdateLocalization();
 
-            _root.Build();
+            _menu = new MenuPresenter(_menuView);
         }
     }
 }

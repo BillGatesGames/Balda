@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Balda
 {
-    public class CompositionRoot : MonoBehaviour
+    public class GameCompositionRoot : MonoBehaviour
     {
         [SerializeField]
         private FieldView _fieldView;

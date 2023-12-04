@@ -35,6 +35,8 @@ namespace Balda
         private void Awake()
         {
             Instance = this;
+
+            DontDestroyOnLoad(gameObject);
         }
 
         void Start()

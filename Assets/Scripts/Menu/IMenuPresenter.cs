@@ -6,5 +6,6 @@ namespace Balda
         void SizeClick(int size);
         void Player1TypeClick(PlayerType type);
         void Player2TypeClick(PlayerType type);
+        void PlayClick();
     }
 }

@@ -1337,7 +1337,6 @@ GameObject:
   m_Component:
   - component: {fileID: 786041776}
   - component: {fileID: 786041782}
-  - component: {fileID: 786041784}
   - component: {fileID: 786041783}
   - component: {fileID: 786041785}
   m_Layer: 0
@@ -1396,20 +1395,6 @@ MonoBehaviour:
   _popupView: {fileID: 453806155}
   _wordListLeftView: {fileID: 2080444189}
   _wordListRightView: {fileID: 1315015768}
-  _player1: 1
-  _player2: 1
---- !u!114 &786041784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 786041774}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23e4f856717148343a6a4da8b27e1f49, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &786041785
 MonoBehaviour:
   m_ObjectHideFlags: 0

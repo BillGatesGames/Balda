@@ -11,10 +11,12 @@ namespace Balda
 
         void Start()
         {
-            LocalizationManager.Instance.SetLang(GameSettings.Lang);
+            var settings = new GameSettings();
+            LocalizationManager.Instance.LoadLocalization();
+            LocalizationManager.Instance.SetLang(settings.Lang);
             LocalizationManager.Instance.UpdateLocalization();
 
-            _root.Build();
+            _root.Build(settings);
         }
     }
 }

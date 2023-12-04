@@ -5,49 +5,62 @@ namespace Balda
     public class MenuPresenter : IMenuPresenter
     {
         private IMenuView _view;
+        private IGameSettings _settings;
 
         private MenuPresenter() { }
 
-        public MenuPresenter(IMenuView view)
+        public MenuPresenter(IMenuView view, IGameSettings settings)
         {
+            _settings = settings;
             _view = view;
             _view.Init(this);
-            _view.UpdateView();
+
+            UpdateView();
+        }
+
+        public void PlayClick()
+        {
+            EventBus.RaiseEvent<ISceneLoadHandler>(h => h.Load(Constants.Scenes.GAME));
         }
 
         public void LangClick(string lang)
         {
-            GameSettings.Lang = lang;
-            GameSettings.Save();
+            _settings.Lang = lang;
+            _settings.Save();
 
-            LocalizationManager.Instance.SetLang(GameSettings.Lang);
+            LocalizationManager.Instance.SetLang(_settings.Lang);
             LocalizationManager.Instance.UpdateLocalization();
 
-            _view.UpdateView();
+            UpdateView();
         }
 
         public void Player1TypeClick(PlayerType type)
         {
-            GameSettings.Player1 = type;
-            GameSettings.Save();
+            _settings.Player1 = type;
+            _settings.Save();
 
-            _view.UpdateView();
+            UpdateView();
         }
 
         public void Player2TypeClick(PlayerType type)
         {
-            GameSettings.Player2 = type;
-            GameSettings.Save();
+            _settings.Player2 = type;
+            _settings.Save();
 
-            _view.UpdateView();
+            UpdateView();
         }
 
         public void SizeClick(int size)
         {
-            GameSettings.Size = size;
-            GameSettings.Save();
+            _settings.Size = size;
+            _settings.Save();
 
-            _view.UpdateView();
+            UpdateView();
+        }
+
+        private void UpdateView()
+        {
+            _view.UpdateView(_settings);
         }
     }
 }

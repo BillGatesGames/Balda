@@ -88,6 +88,12 @@ namespace Balda
         public void Init(IMenuPresenter presenter)
         {
             _presenter = presenter;
+            _play.OnClick = Play_OnClick;
+        }
+
+        private void Play_OnClick(ButtonEx button)
+        {
+            _presenter.PlayClick();
         }
 
         private void LangGroup_OnClick(ButtonEx button)
@@ -150,7 +156,7 @@ namespace Balda
             _presenter.Player2TypeClick(player);
         }
 
-        private void UpdateLang()
+        private void UpdateLang(string lang)
         {
             if (_langGroup == null)
             {
@@ -158,7 +164,7 @@ namespace Balda
                 _langGroup.OnClick += LangGroup_OnClick;
             }
 
-            switch (GameSettings.Lang)
+            switch (lang)
             {
                 case Constants.Localization.RU:
                     _langGroup.Select(_langRU);
@@ -169,7 +175,7 @@ namespace Balda
             }
         }
 
-        private void UpdateSize()
+        private void UpdateSize(int size)
         {
             if (_sizeGroup == null)
             {
@@ -177,21 +183,21 @@ namespace Balda
                 _sizeGroup.OnClick += SizeGroup_OnClick;
             }
 
-            switch (GameSettings.Size)
+            switch (size)
             {
-                case 5:
+                case Constants.Field.SIZE_5x5:
                     _sizeGroup.Select(_size5x5);
                     break;
-                case 7:
+                case Constants.Field.SIZE_7x7:
                     _sizeGroup.Select(_size7x7);
                     break;
-                case 9:
+                case Constants.Field.SIZE_9x9:
                     _sizeGroup.Select(_size9x9);
                     break;
             }
         }
 
-        private void UpdatePlayer1Type()
+        private void UpdatePlayer1Type(PlayerType playerType)
         {
             if (_player1Group == null)
             {
@@ -199,7 +205,7 @@ namespace Balda
                 _player1Group.OnClick += Player1Group_OnClick;
             }
 
-            switch (GameSettings.Player1)
+            switch (playerType)
             {
                 case PlayerType.Human:
                     _player1Group.Select(_player1Human);
@@ -210,7 +216,7 @@ namespace Balda
             }
         }
 
-        private void UpdatePlayer2Type()
+        private void UpdatePlayer2Type(PlayerType playerType)
         {
             if (_player2Group == null)
             {
@@ -218,7 +224,7 @@ namespace Balda
                 _player2Group.OnClick += Player2Group_OnClick;
             }
 
-            switch (GameSettings.Player2)
+            switch (playerType)
             {
                 case PlayerType.Human:
                     _player2Group.Select(_player2Human);
@@ -229,12 +235,12 @@ namespace Balda
             }
         }
 
-        public void UpdateView()
+        public void UpdateView(IGameSettings settings)
         {
-            UpdateLang();
-            UpdateSize();
-            UpdatePlayer1Type();
-            UpdatePlayer2Type();
+            UpdateLang(settings.Lang);
+            UpdateSize(settings.Size);
+            UpdatePlayer1Type(settings.Player1);
+            UpdatePlayer2Type(settings.Player2);
         }
 
         void Start()

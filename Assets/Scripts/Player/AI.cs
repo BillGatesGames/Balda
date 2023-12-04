@@ -92,11 +92,11 @@ namespace Balda
 
             _field.SetChar(letter.Pos, letter.Char, true);
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(Constants.AI.NEW_LETTER_SHOW_DURATION);
 
             OnLetterSet?.Invoke(this);
 
-            yield return Routiner.Instance.StartCoroutine(_field.ShowWord(word, 0.2f, () =>
+            yield return Routiner.Instance.StartCoroutine(_field.ShowWord(word, Constants.AI.WORD_LETTER_SHOW_DURATION, () =>
             {
                 _wordList.AddWord(word.ToString());
                 OnMoveCompleted?.Invoke(this);

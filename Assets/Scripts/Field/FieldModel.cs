@@ -8,8 +8,6 @@ namespace Balda
 {
     public class FieldModel : IFieldModel
     {
-        private const int DEFAULT_SIZE = 5;
-
         private int _size;
         private char?[,] _field;
         private Trie _trie;
@@ -60,8 +58,10 @@ namespace Balda
             }
         }
 
-        public FieldModel()
+        public FieldModel(int size)
         {
+            _size = size;
+
             Init();
         }
 
@@ -100,7 +100,7 @@ namespace Balda
 
         public int GetSize()
         {
-            return DEFAULT_SIZE;
+            return _size;
         }
 
         public Trie GetTrie()

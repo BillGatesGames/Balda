@@ -9,7 +9,25 @@ namespace Balda
 
     public class ResourceLoader : MonoBehaviour
     {
-        public static ResourceLoader Instance { get; private set; }
+        private static ResourceLoader _instance;
+        public static ResourceLoader Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    var go = new GameObject(nameof(ResourceLoader));
+                    _instance = go.AddComponent<ResourceLoader>();
+                }
+
+                return _instance;
+            }
+
+            private set
+            {
+                _instance = value;
+            }
+        }
 
         public T LoadLocal<T>(string fileName) where T : class
         {

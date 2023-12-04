@@ -9,16 +9,14 @@ namespace Balda
         [SerializeField]
         private MenuView _menuView;
 
-        private IMenuPresenter _menu;
-
         void Start()
         {
-            GameSettings.Load();
+            var settings = new GameSettings();
             LocalizationManager.Instance.LoadLocalization();
-            LocalizationManager.Instance.SetLang(GameSettings.Lang);
+            LocalizationManager.Instance.SetLang(settings.Lang);
             LocalizationManager.Instance.UpdateLocalization();
 
-            _menu = new MenuPresenter(_menuView);
+            var menu = new MenuPresenter(_menuView, settings);
         }
     }
 }

@@ -3,6 +3,6 @@
     public interface IMenuView
     {
         void Init(IMenuPresenter presenter);
-        void UpdateView();
+        void UpdateView(IGameSettings settings);
     }
 }

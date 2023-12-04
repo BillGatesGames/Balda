@@ -10,5 +10,10 @@ namespace Balda
     {
         void SwitchToState(StateData data);
     }
+
+    public interface ISceneLoadHandler : IHandler
+    {
+        void Load(int index);
+    }
 }
 

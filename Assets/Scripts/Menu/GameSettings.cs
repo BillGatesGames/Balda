@@ -4,19 +4,24 @@ using UnityEngine;
 
 namespace Balda
 {
-    public static class GameSettings
+    public class GameSettings : IGameSettings
     {
         private const string SIZE_KEY = "size";
         private const string LANG_KEY = "lang";
         private const string PLAYER1_TYPE = "player1_type";
         private const string PLAYER2_TYPE = "player2_type";
 
-        public static int Size;
-        public static string Lang;
-        public static PlayerType Player1;
-        public static PlayerType Player2;
+        public int Size { get; set; }
+        public string Lang { get; set; }
+        public PlayerType Player1 { get; set; }
+        public PlayerType Player2 { get; set; }
 
-        private static int GetInt(string key, int @default)
+        public GameSettings()
+        {
+            Load();
+        }
+
+        private int GetInt(string key, int @default)
         {
             if (PlayerPrefs.HasKey(key))
             {
@@ -26,7 +31,7 @@ namespace Balda
             return @default;
         }
 
-        private static string GetStr(string key, string @default)
+        private string GetStr(string key, string @default)
         {
             if (PlayerPrefs.HasKey(key))
             {
@@ -36,7 +41,7 @@ namespace Balda
             return @default;
         }
 
-        public static void Save()
+        public void Save()
         {
             PlayerPrefs.SetInt(SIZE_KEY, Size);
             PlayerPrefs.SetInt(PLAYER1_TYPE, (int)Player1);
@@ -44,7 +49,7 @@ namespace Balda
             PlayerPrefs.SetString(LANG_KEY, Lang);
         }
 
-        public static void Load()
+        private void Load()
         {
             Size = GetInt(SIZE_KEY, 5);
             Player1 = (PlayerType)GetInt(PLAYER1_TYPE, (int)PlayerType.Human);

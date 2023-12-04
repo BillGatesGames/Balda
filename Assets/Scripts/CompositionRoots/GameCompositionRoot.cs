@@ -22,13 +22,6 @@ namespace Balda
         [SerializeField]
         private WordListView _wordListRightView;
 
-        [Header("Debug")]
-        [SerializeField]
-        private PlayerType _player1;
-
-        [SerializeField]
-        private PlayerType _player2;
-
         private IFieldPresenter _field;
         private IAlphabetPresenter _alphabet;
         private IMessagePresenter _message;
@@ -52,9 +45,9 @@ namespace Balda
             return new AI(_field, wordList);
         }
 
-        public void Build()
+        public void Build(IGameSettings settings)
         {
-            _field = new FieldPresenter(new FieldModel(), _fieldView);
+            _field = new FieldPresenter(new FieldModel(settings.Size), _fieldView);
             _alphabet = new AlphabetPresenter(new AlphabetModel(), _alphabetView);
             _message = new MessagePresenter(new MessageModel(), _messageView);
             _popup = new PopupMessagePresenter(new MessageModel(), _popupView);
@@ -64,8 +57,8 @@ namespace Balda
 
             _stateMachineModel = new StateMachineModel();
 
-            var player1 = CreatePlayer(_player1, _wordList1);
-            var player2 = CreatePlayer(_player2, _wordList2);
+            var player1 = CreatePlayer(settings.Player1, _wordList1);
+            var player2 = CreatePlayer(settings.Player2, _wordList2);
 
             _stateMachine = new StateMachinePresenter(player1, player2, _field, _popup, _stateMachineModel);
         }

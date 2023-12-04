@@ -12,6 +12,9 @@ namespace Balda
         private GameObject _gameObject;
 
         [SerializeField]
+        private TextMeshProUGUI _title;
+
+        [SerializeField]
         private TextMeshProUGUI _text;
 
         [SerializeField]
@@ -31,6 +34,8 @@ namespace Balda
         public void Init(IMessagePresenter presenter)
         {
             _presenter = presenter;
+
+            Subscribe();
         }
 
         public void Hide()
@@ -40,6 +45,12 @@ namespace Balda
 
         public void SetData(MessageData data)
         {
+            if (_title != null)
+            {
+                _title.text = GetLocal(data.Title.Alias);
+                _title.gameObject.SetActive(data.Title.Active);
+            }
+           
             _text.text = GetLocal(data.Message.Alias);
             _leftBtnText.text = GetLocal(data.LeftButton.Alias);
             _rightBtnText.text = GetLocal(data.RightButton.Alias);
@@ -54,10 +65,30 @@ namespace Balda
             return LocalizationManager.Instance.Get(text);
         }
 
+        private void Subscribe()
+        {
+            Unsubscribe();
+
+            _leftBtn.onClick.AddListener(_presenter.LeftBtnClick);
+            _rightBtn.onClick.AddListener(_presenter.RightBtnClick);
+        }
+
+        private void Unsubscribe()
+        {
+            _leftBtn.onClick.RemoveListener(_presenter.LeftBtnClick);
+            _rightBtn.onClick.RemoveListener(_presenter.RightBtnClick);
+        }
+
         void Start()
         {
-            _leftBtn.onClick.AddListener(() => _presenter.LeftBtnClick());
-            _rightBtn.onClick.AddListener(() => _presenter.RightBtnClick());
+
+        }
+
+        void OnDestroy()
+        {
+            Unsubscribe();
+
+            _presenter = null;
         }
     }
 }

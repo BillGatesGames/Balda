@@ -33,7 +33,7 @@ namespace Balda
             {
                 if (_handlers.ContainsKey(type))
                 {
-                    _handlers.Remove(type);
+                    _handlers[type].Remove(handler);
                 }
             }
         }

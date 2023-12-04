@@ -3,6 +3,12 @@ using System.Collections;
 
 namespace Balda
 {
+    public enum PlayerType
+    {
+        Human,
+        AI
+    }
+
     public interface IPlayer
     {
         event Action<IPlayer> OnLetterSet;

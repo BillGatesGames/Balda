@@ -75,7 +75,14 @@ namespace Balda
             {
                 foreach (var cell in _cells)
                 {
+                    if (cell == null)
+                    {
+                        continue;
+                    }
+                    
+                    cell.OnClick = null;
                     Destroy(cell.gameObject);
+
                 }
             }
 
@@ -85,6 +92,13 @@ namespace Balda
         void Start()
         {
 
+        }
+
+        void OnDestroy()
+        {
+            Clear();
+
+            _presenter = null;
         }
     }
 }

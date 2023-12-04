@@ -26,6 +26,14 @@
       "EN": "Restart",
       "RU": "Заново"
     },
+    "info": {
+      "EN": "Info",
+      "RU": "Информация"
+    },
+    "error": {
+      "EN": "Error",
+      "RU": "Ошибка"
+    },
     "game_completed": {
       "EN": "Game completed",
       "RU": "Игра завершена"

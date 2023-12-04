@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Balda
 {
-    public class Human : IPlayer
+    public class Human : IPlayer, IDisposable
     {
         public event Action<IPlayer> OnLetterSet;
         public event Action<IPlayer> OnMoveCompleted;
@@ -18,6 +18,7 @@ namespace Balda
         private IAlphabetPresenter _alphabet;
         private IWordListPresenter _wordList;
         private Func<(State State, SubState SubState)> _stateProvider;
+        private bool disposedValue;
 
         public bool InputLocking => false;
 
@@ -63,9 +64,7 @@ namespace Balda
                             var word = _field.GetModel().Selection.GetWord();
                             _wordList.AddWord(word);
 
-                            _alphabet.OnCellClick -= Alphabet_OnCellClick;
-                            _message.OnLeftButtonClick -= Message_OnLeftButtonClick;
-                            _message.OnRightButtonClick -= Message_OnRightButtonClick;
+                            Unsubscribe();
 
                             OnMoveCompleted?.Invoke(this);
                         }
@@ -87,11 +86,45 @@ namespace Balda
             }
         }
 
-        public void Move()
+        private void Subscribe()
         {
+            Unsubscribe();
+
             _alphabet.OnCellClick += Alphabet_OnCellClick;
             _message.OnLeftButtonClick += Message_OnLeftButtonClick;
             _message.OnRightButtonClick += Message_OnRightButtonClick;
+        }
+
+        private void Unsubscribe()
+        {
+            _alphabet.OnCellClick -= Alphabet_OnCellClick;
+            _message.OnLeftButtonClick -= Message_OnLeftButtonClick;
+            _message.OnRightButtonClick -= Message_OnRightButtonClick;
+        }
+
+        public void Move()
+        {
+            Subscribe();
+        }
+
+        private void Clean()
+        {
+            if (!disposedValue)
+            {
+                Unsubscribe();
+                disposedValue = true;
+            }
+        }
+
+        ~Human()
+        {
+            Clean();
+        }
+
+        public void Dispose()
+        {
+            Clean();
+            GC.SuppressFinalize(this);
         }
     }
 }

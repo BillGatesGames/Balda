@@ -5,13 +5,14 @@ using UnityEngine;
 
 namespace Balda
 {
-    public class MessagePresenter : IMessagePresenter
+    public class MessagePresenter : IMessagePresenter, IDisposable
     {
         public event Action OnLeftButtonClick;
         public event Action OnRightButtonClick;
 
         protected IMessageModel _model;
         protected IMessageView _view;
+        private bool disposedValue;
 
         private MessagePresenter() { }
 
@@ -60,6 +61,30 @@ namespace Balda
                     }
                     break;
             }
+        }
+
+        protected virtual void Clean()
+        {
+            if (!disposedValue)
+            {
+                _model = null;
+                _view = null;
+
+                EventBus.Unregister(this);
+
+                disposedValue = true;
+            }
+        }
+
+        ~MessagePresenter()
+        {
+            Clean();
+        }
+
+        public void Dispose()
+        {
+            Clean();
+            GC.SuppressFinalize(this);
         }
     }
 }

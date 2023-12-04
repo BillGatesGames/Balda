@@ -17,5 +17,10 @@ namespace Balda
         {
 
         }
+
+        void OnDestroy()
+        {
+            StopAllCoroutines();
+        }
     }
 }

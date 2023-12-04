@@ -1,7 +1,3 @@
-using Newtonsoft.Json;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 namespace Balda
@@ -28,46 +24,50 @@ namespace Balda
 
         [Header("Debug")]
         [SerializeField]
-        private bool _firstPlayerIsHuman;
+        private PlayerType _player1;
+
+        [SerializeField]
+        private PlayerType _player2;
+
+        private IFieldPresenter _field;
+        private IAlphabetPresenter _alphabet;
+        private IMessagePresenter _message;
+        private IMessagePresenter _popup;
+        private IWordListPresenter _wordList1;
+        private IWordListPresenter _wordList2;
+        private IStateMachinePresenter _stateMachine;
+
+        private IStateMachineModel _stateMachineModel;
+
+        private IPlayer CreatePlayer(PlayerType type, IWordListPresenter wordList)
+        {
+            if (type == PlayerType.Human)
+            {
+                return new Human(_field, _alphabet, _message, wordList, () =>
+                {
+                    return (_stateMachineModel.State, _stateMachineModel.SubState);
+                });
+            }
+            
+            return new AI(_field, wordList);
+        }
 
         public void Build()
         {
-            #if !UNITY_EDITOR
-             _firstPlayerIsHuman = false;
-            #endif
+            _field = new FieldPresenter(new FieldModel(), _fieldView);
+            _alphabet = new AlphabetPresenter(new AlphabetModel(), _alphabetView);
+            _message = new MessagePresenter(new MessageModel(), _messageView);
+            _popup = new PopupMessagePresenter(new MessageModel(), _popupView);
 
-            var field = new FieldPresenter(new FieldModel(), _fieldView);
-            var alphabet = new AlphabetPresenter(new AlphabetModel(), _alphabetView);
-            var message = new MessagePresenter(new MessageModel(), _messageView);
-            var popup = new PopupMessagePresenter(new MessageModel(), _popupView);
+            _wordList1 = new WordListPresenter(new WordListModel(), _wordListLeftView);
+            _wordList2 = new WordListPresenter(new WordListModel(), _wordListRightView);
 
-            var wordList1 = new WordListPresenter(new WordListModel(), _wordListLeftView);
-            var wordList2 = new WordListPresenter(new WordListModel(), _wordListRightView);
+            _stateMachineModel = new StateMachineModel();
 
-            var stateMachineModel = new StateMachineModel();
+            var player1 = CreatePlayer(_player1, _wordList1);
+            var player2 = CreatePlayer(_player2, _wordList2);
 
-            IPlayer player1 = null;
-
-            if (_firstPlayerIsHuman)
-            {
-                player1 = new Human(field, alphabet, message, wordList1, () =>
-                {
-                    return (stateMachineModel.State, stateMachineModel.SubState);
-                });
-            }
-            else
-            {
-                player1 = new AI(field, wordList1);
-            }
-            /*
-            var player2 = new Human(field, alphabet, message, wordList2, () =>
-            {
-                return (stateMachineModel.State, stateMachineModel.SubState);
-            });
-            */
-            var player2 = new AI(field, wordList2);
-
-            var stateMachine = new StateMachinePresenter(player1, player2, field, popup, stateMachineModel);
+            _stateMachine = new StateMachinePresenter(player1, player2, _field, _popup, _stateMachineModel);
         }
     }
 }

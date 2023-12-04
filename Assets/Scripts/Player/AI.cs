@@ -74,33 +74,33 @@ namespace Balda
         private IEnumerator MoveRoutine()
         {
             var words = GetWords().OrderByDescending(w => w.Letters.Count).ToList();
-            int wordsFound = words.Count;
+
+            Debug.Log($"Number of words found: {words.Count}");
+
+            if (words.Count == 0)
+            {
+                OnError?.Invoke(this, SubState.WordNotFound);
+                yield break;
+            }
+            
             words = words.Where(w => w.Letters.Count == words.First().Letters.Count).ToList();
             var word = words[UnityEngine.Random.Range(0, words.Count)];
 
-            if (word != null)
+            Debug.Log($"AI Answer: {word} ({word.Letters.Count})");
+
+            var letter = word.Letters.FirstOrDefault(l => l.IsNew);
+
+            _field.SetChar(letter.Pos, letter.Char, true);
+
+            yield return new WaitForSeconds(1f);
+
+            OnLetterSet?.Invoke(this);
+
+            yield return Routiner.Instance.StartCoroutine(_field.ShowWord(word, 0.2f, () =>
             {
-                Debug.Log($"Number of words found: {wordsFound}");
-                Debug.Log($"AI Answer: {word} ({word.Letters.Count})");
-
-                var letter = word.Letters.FirstOrDefault(l => l.IsNew);
-
-                _field.SetChar(letter.Pos, letter.Char, true);
-
-                yield return new WaitForSeconds(1f);
-
-                OnLetterSet?.Invoke(this);
-
-                yield return Routiner.Instance.StartCoroutine(_field.ShowWord(word, 0.2f, () =>
-                {
-                    _wordList.AddWord(word.ToString());
-                    OnMoveCompleted?.Invoke(this);
-                }));
-            }
-            else
-            {
-                OnError?.Invoke(this, SubState.WordNotFound);
-            }
+                _wordList.AddWord(word.ToString());
+                OnMoveCompleted?.Invoke(this);
+            }));
         }
 
         public HashSet<Word> GetWords()

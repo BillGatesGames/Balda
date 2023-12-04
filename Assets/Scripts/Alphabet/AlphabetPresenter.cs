@@ -1,17 +1,16 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
-using UnityEngine;
 
 namespace Balda
 {
-    public class AlphabetPresenter : IAlphabetPresenter
+    public sealed class AlphabetPresenter : IAlphabetPresenter, IDisposable
     {
         public event Action<Cell> OnCellClick;
 
         private IAlphabetView _view;
         private IAlphabetModel _model;
+        private bool disposedValue;
+
+        private AlphabetPresenter() { }
 
         public AlphabetPresenter(IAlphabetModel model, IAlphabetView view)
         {
@@ -49,6 +48,30 @@ namespace Balda
                     }
                     break;
             }
+        }
+
+        private void Clean()
+        {
+            if (!disposedValue)
+            {
+                _view = null;
+                _model = null;
+
+                EventBus.Unregister(this);
+                
+                disposedValue = true;
+            }
+        }
+
+        ~AlphabetPresenter()
+        {
+            Clean();
+        }
+
+        public void Dispose()
+        {
+            Clean();
+            GC.SuppressFinalize(this);
         }
     }
 }

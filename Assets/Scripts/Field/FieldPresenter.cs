@@ -6,13 +6,15 @@ using UnityEngine;
 
 namespace Balda
 {
-    public class FieldPresenter : IFieldPresenter
+    public sealed class FieldPresenter : IFieldPresenter, IDisposable
     {
         public event Action<Cell> OnCellClick;
-        public event Action OnEnemyMoveComplete;
 
         private IFieldView _view;
         private IFieldModel _model;
+        private bool disposedValue;
+
+        private FieldPresenter() { }
 
         public FieldPresenter(IFieldModel model, IFieldView view)
         {
@@ -172,6 +174,30 @@ namespace Balda
             yield return new WaitForSeconds(delay);
 
             callback?.Invoke();
+        }
+
+        private void Clean()
+        {
+            if (!disposedValue)
+            {
+                _view = null;
+                _model = null;
+
+                EventBus.Unregister(this);
+
+                disposedValue = true;
+            }
+        }
+
+        ~FieldPresenter()
+        {
+            Clean();
+        }
+
+        public void Dispose()
+        {
+            Clean();
+            GC.SuppressFinalize(this);
         }
     }
 }

@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+using System;
 
 namespace Balda
 {
@@ -19,7 +16,7 @@ namespace Balda
         }
     }
 
-    public class StateMachinePresenter : IStateMachinePresenter
+    public sealed class StateMachinePresenter : IStateMachinePresenter, IDisposable
     {
         private IStateMachineModel _model;
         private IFieldPresenter _field;
@@ -27,6 +24,7 @@ namespace Balda
 
         private IPlayer _player1;
         private IPlayer _player2;
+        private bool disposedValue;
 
         private StateMachinePresenter() { }
 
@@ -34,12 +32,20 @@ namespace Balda
         {
             _field = field;
             _model = model;
-
             _popup = popup;
-            _popup.OnLeftButtonClick += Popup_OnLeftButtonClick;
 
             _player1 = player1;
             _player2 = player2;
+
+            Subscribe();
+            SwitchToInitState();
+        }
+
+        private void Subscribe()
+        {
+            Unsubscribe();
+
+            _popup.OnLeftButtonClick += Popup_OnLeftButtonClick;
 
             _player1.OnResetMoveState += Player_OnResetMoveState;
             _player2.OnResetMoveState += Player_OnResetMoveState;
@@ -52,13 +58,28 @@ namespace Balda
 
             _player1.OnMoveCompleted += Player_OnMoveCompleted;
             _player2.OnMoveCompleted += Player_OnMoveCompleted;
+        }
 
-            SwitchToInitState();
+        private void Unsubscribe()
+        {
+            _popup.OnLeftButtonClick -= Popup_OnLeftButtonClick;
+
+            _player1.OnResetMoveState -= Player_OnResetMoveState;
+            _player2.OnResetMoveState -= Player_OnResetMoveState;
+
+            _player1.OnLetterSet -= Player_OnLetterSet;
+            _player2.OnLetterSet -= Player_OnLetterSet;
+
+            _player1.OnError -= Player_OnError;
+            _player2.OnError -= Player_OnError;
+
+            _player1.OnMoveCompleted -= Player_OnMoveCompleted;
+            _player2.OnMoveCompleted -= Player_OnMoveCompleted;
         }
 
         private void Popup_OnLeftButtonClick()
         {
-            if (_model.State == State.Completed)
+            if (_model.State == State.Completed || _model.SubState == SubState.WordNotFound)
             {
                 SwitchToInitState();
             }
@@ -148,6 +169,27 @@ namespace Balda
             {
                 h.SwitchToState(data);
             });
+        }
+
+        private void Clean()
+        {
+            if (!disposedValue)
+            {
+                Unsubscribe();
+
+                disposedValue = true;
+            }
+        }
+
+        ~StateMachinePresenter()
+        {
+            Clean();
+        }
+
+        public void Dispose()
+        {
+            Clean();
+            GC.SuppressFinalize(this);
         }
     }
 }

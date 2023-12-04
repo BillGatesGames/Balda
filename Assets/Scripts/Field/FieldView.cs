@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Bson;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -58,7 +59,9 @@ namespace Balda
         private void AdjustSize(int size)
         {
             var rect = _gridLayout.GetComponent<RectTransform>();
-            rect.sizeDelta = new Vector2(size, size) * _gridLayout.cellSize;
+            float cellSize = rect.sizeDelta.x / size;
+
+            _gridLayout.cellSize = new Vector2(cellSize, cellSize);
         }
 
         public void UpdateSelection(IReadOnlyCollection<Vector2Int> selection)
@@ -88,6 +91,12 @@ namespace Balda
             {
                 foreach (var cell in _cells.Values)
                 {
+                    if (cell == null)
+                    {
+                        continue;
+                    }
+
+                    cell.OnClick = null;
                     Destroy(cell.gameObject);
                 }
             }
@@ -98,6 +107,13 @@ namespace Balda
         void Start()
         {
 
+        }
+
+        void OnDestroy()
+        {
+            Clear();
+
+            _presenter = null;
         }
     }
 }

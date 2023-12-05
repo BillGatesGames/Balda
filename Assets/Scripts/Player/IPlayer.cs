@@ -9,7 +9,7 @@ namespace Balda
         AI
     }
 
-    public interface IPlayer
+    public interface IPlayer : IDisposable
     {
         event Action<IPlayer> OnLetterSet;
         event Action<IPlayer> OnMoveCompleted;

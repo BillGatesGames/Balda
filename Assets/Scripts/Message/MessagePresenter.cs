@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Balda
 {
-    public class MessagePresenter : IMessagePresenter, IDisposable
+    public class MessagePresenter : IMessagePresenter
     {
         public event Action OnLeftButtonClick;
         public event Action OnRightButtonClick;

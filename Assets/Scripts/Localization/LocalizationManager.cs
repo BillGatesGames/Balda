@@ -5,28 +5,8 @@ using UnityEngine;
 
 namespace Balda
 {
-    public class LocalizationManager : MonoBehaviour
+    public class LocalizationManager : Singleton<LocalizationManager>
     {
-        private static LocalizationManager _instance;
-        public static LocalizationManager Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    var go = new GameObject(nameof(LocalizationManager));
-                    _instance = go.AddComponent<LocalizationManager>();
-                }
-
-                return _instance;
-            }
-
-            private set
-            {
-                _instance = value;
-            }
-        }
-
         private LocalizationData _data;
         private HashSet<string> _langs;
         private string _lang = string.Empty;
@@ -100,24 +80,6 @@ namespace Balda
             {
                 item.UpdateText();
             }
-        }
-
-        private void Awake()
-        {
-            if (_instance != null && _instance != this)
-            {
-                Destroy(this);
-                return;
-            }
-
-            Instance = this;
-
-            DontDestroyOnLoad(gameObject);
-        }
-
-        void Start()
-        {
-
         }
     }
 }

@@ -10,6 +10,11 @@ namespace Balda
     {
         private static Dictionary<Type, List<IHandler>> _handlers = new Dictionary<Type, List<IHandler>>();
 
+        public static void Clear()
+        {
+            _handlers.Clear();
+        }
+
         public static void Register(IHandler handler)
         {
             var types = GetHandlersTypes(handler);

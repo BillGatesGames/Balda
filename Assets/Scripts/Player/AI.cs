@@ -265,5 +265,10 @@ namespace Balda
             int size = _field.GetModel().GetSize();
             return x >= 0 && y >= 0 && x < size && y < size;
         }
+
+        public void Dispose()
+        {
+            
+        }
     }
 }

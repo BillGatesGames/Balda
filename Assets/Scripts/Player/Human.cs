@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Balda
 {
-    public class Human : IPlayer, IDisposable
+    public class Human : IPlayer
     {
         public event Action<IPlayer> OnLetterSet;
         public event Action<IPlayer> OnMoveCompleted;

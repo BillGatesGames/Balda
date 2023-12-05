@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Balda
 {
-    public interface IFieldPresenter : IStateHandler
+    public interface IFieldPresenter : IPresenter, IStateHandler
     {
         IEnumerator ShowWord(Word word, float delay, Action callback);
         void SetChar(Vector2Int pos, char @char, bool select = false);

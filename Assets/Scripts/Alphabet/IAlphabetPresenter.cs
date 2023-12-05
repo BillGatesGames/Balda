@@ -2,7 +2,7 @@
 
 namespace Balda
 {
-    public interface IAlphabetPresenter : IStateHandler
+    public interface IAlphabetPresenter : IStateHandler, IPresenter
     {
         event Action<Cell> OnCellClick;
         void CellClick(Cell cell);

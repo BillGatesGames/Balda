@@ -62,5 +62,16 @@ namespace Balda
 
             _stateMachine = new StateMachinePresenter(player1, player2, _field, _popup, _stateMachineModel);
         }
+
+        private void OnDestroy()
+        {
+            _field.Dispose();
+            _alphabet.Dispose();
+            _message.Dispose();
+            _popup.Dispose();
+            _wordList1.Dispose();
+            _wordList2.Dispose();
+            _stateMachine.Dispose();
+        }
     }
 }

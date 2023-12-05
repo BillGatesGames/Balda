@@ -55,6 +55,7 @@ namespace Balda
                     break;
                 case State.Completed:
                     {
+                        message.Title = new MessageItemData("info", true);
                         message.Message = new MessageItemData("game_completed", true);
                         message.LeftButton = new MessageItemData("restart", true);
                         message.RightButton = new MessageItemData(false);

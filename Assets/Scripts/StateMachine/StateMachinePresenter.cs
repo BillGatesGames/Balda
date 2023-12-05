@@ -16,7 +16,7 @@ namespace Balda
         }
     }
 
-    public sealed class StateMachinePresenter : IStateMachinePresenter, IDisposable
+    public sealed class StateMachinePresenter : IStateMachinePresenter
     {
         private IStateMachineModel _model;
         private IFieldPresenter _field;

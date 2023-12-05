@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Balda
 {
-    public sealed class WordListPresenter : IWordListPresenter, IDisposable
+    public sealed class WordListPresenter : IWordListPresenter
     {
         private IWordListModel _model;
         private IWordListView _view;

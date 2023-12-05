@@ -1,6 +1,6 @@
 ﻿namespace Balda
 {
-    public interface IStateMachinePresenter
+    public interface IStateMachinePresenter : IPresenter
     {
     }
 }

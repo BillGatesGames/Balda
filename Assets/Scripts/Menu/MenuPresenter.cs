@@ -62,5 +62,10 @@ namespace Balda
         {
             _view.UpdateView(_settings);
         }
+
+        public void Dispose()
+        {
+            
+        }
     }
 }

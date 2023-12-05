@@ -1,6 +1,6 @@
 namespace Balda
 {
-    public interface IMenuPresenter
+    public interface IMenuPresenter : IPresenter
     {
         void LangClick(string lang);
         void SizeClick(int size);

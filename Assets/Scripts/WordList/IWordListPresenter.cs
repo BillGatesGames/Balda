@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Balda
 {
-    public interface IWordListPresenter : IStateHandler
+    public interface IWordListPresenter : IPresenter, IStateHandler
     {
         void AddWord(string text);
         int GetScore();

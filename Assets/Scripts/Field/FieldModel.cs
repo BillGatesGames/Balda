@@ -79,7 +79,7 @@ namespace Balda
             _trie = new Trie();
             _excludedWords = new HashSet<string>();
 
-            Selection = new Selection(_field);
+            Selection = new Selection(this);
 
             var words = _trie.Words.Where(w => w.Length == _size).ToList();
 

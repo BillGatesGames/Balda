@@ -15,9 +15,10 @@ namespace Balda
 
     public class Selection
     {
-        private char?[,] _field;
+        private IFieldModel _model;
         private List<Vector2Int> _dxdy;
         private List<Vector2Int> _positions;
+        private char?[,] _field;
 
         public SelectionMode Mode { get; set; } = SelectionMode.None;
 
@@ -29,17 +30,18 @@ namespace Balda
             }
         }
 
-        public Selection(char?[,] field)
+        public Selection(IFieldModel model)
         {
-            _field = field;
+            _model = model;
+            _field = _model.GetField();
             _positions = new List<Vector2Int>();
             _dxdy = new List<Vector2Int>()
-        {
-            new Vector2Int(-1, 0),
-            new Vector2Int(1, 0),
-            new Vector2Int(0, 1),
-            new Vector2Int(0, -1)
-        };
+            {
+                new Vector2Int(-1, 0),
+                new Vector2Int(1, 0),
+                new Vector2Int(0, 1),
+                new Vector2Int(0, -1)
+            };
         }
 
         public string GetWord()
@@ -52,51 +54,99 @@ namespace Balda
             _positions = new List<Vector2Int>();
         }
 
-        public void Select(Vector2Int? pos)
+        public void Select(Vector2Int pos)
         {
-            if (!pos.HasValue)
-            {
-                _positions = new List<Vector2Int>();
-                return;
-            }
+            bool canSelect = true;
 
-            if (Mode == SelectionMode.Single)
-            {
-                _positions = new List<Vector2Int>() { pos.Value };
-            }
-
-            if (Mode == SelectionMode.Multiple)
-            {
-                if (!_positions.Contains(pos.Value))
-                {
-                    _positions.Add(pos.Value);
-                }
-            }
-        }
-
-        public bool CanSelect(Vector2Int pos)
-        {
             switch (Mode)
             {
                 case SelectionMode.Single:
                     {
-                        return CanSelectInSingleMode(pos);
+                        //если клетка пустая
+                        if (_model.IsEmpty(pos))
+                        {
+                            //и ее нельзя выделить, то обнуляем позицию
+                            if (!CanSelectInSingleMode(pos, _model.LastCharPos))
+                            {
+                                canSelect = false;
+                            }
+
+                            //если есть новая буква, то удаляем
+                            if (_model.LastCharPos.HasValue)
+                            {
+                                _model.DeleteLastChar();
+                            }
+                        }
+                        else
+                        {
+                            //если есть новая буква
+                            if (_model.LastCharPos.HasValue)
+                            {
+                                //она выделена 
+                                if (_positions.Contains(_model.LastCharPos.Value))
+                                {
+                                    //и нажатая клетка не совпадает с выделенной, то обнуляем
+                                    if (pos != _model.LastCharPos)
+                                    {
+                                        _model.DeleteLastChar();
+                                        canSelect = false;
+                                        
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                _model.DeleteLastChar();
+                                canSelect = false; 
+                            }
+                        }
+
+                        Clear();
+
+                        if (canSelect)
+                        {
+                            _positions.Add(pos);
+                        }
                     }
+                    break;
                 case SelectionMode.Multiple:
                     {
-                        if (_field[pos.x, pos.y] != null)
+                        //если нажатую клетку нелья выделить или она уже содержится в выделенных, то обнулям
+                        if (!CanSelectInMultipleMode(pos) || _positions.Contains(pos))
                         {
-                            return _positions.Count == 0 || CanSelectInMultipleMode(pos);
+                            canSelect = false;
+                        }
+
+                        if (canSelect)
+                        {
+                            if (!_positions.Contains(pos))
+                            {
+                                _positions.Add(pos);
+                            }
+                        }
+                        else
+                        {
+                            Clear();
                         }
                     }
                     break;
             }
-
-            return false;
         }
 
         private bool CanSelectInMultipleMode(Vector2Int pos)
         {
+            if (_field[pos.x, pos.y] != null)
+            {
+                if (_positions.Count == 0)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
+
             for (int i = 0; i < _dxdy.Count; i++)
             {
                 int dx = pos.x + _dxdy[i].x;
@@ -119,7 +169,7 @@ namespace Balda
             return false;
         }
 
-        private bool CanSelectInSingleMode(Vector2Int pos)
+        private bool CanSelectInSingleMode(Vector2Int pos, Vector2Int? excludedPos)
         {
             if (_field[pos.x, pos.y] != null)
             {
@@ -135,6 +185,14 @@ namespace Balda
                 {
                     if (_field[dx, dy] != null)
                     {
+                        if (excludedPos.HasValue)
+                        {
+                            if (excludedPos == new Vector2Int(dx, dy))
+                            {
+                                continue;
+                            }
+                        }
+
                         return true;
                     }
                 }
@@ -145,7 +203,7 @@ namespace Balda
 
         private bool InBounds(int x, int y)
         {
-            return x >= 0 && y >= 0 && x < _field.GetLength(0) && y < _field.GetLength(1);
+            return x >= 0 && y >= 0 && x < _model.GetSize() && y < _model.GetSize();
         }
     }
 }

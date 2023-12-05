@@ -56,48 +56,10 @@ namespace Balda
                 return;
             }
 
-            Vector2Int? pos = new Vector2Int(cell.X, cell.Y);
+            var pos = new Vector2Int(cell.X, cell.Y);
 
-            switch (_model.Selection.Mode)
-            {
-                case SelectionMode.Single:
-                    {
-                        if (_model.Selection.Positions.Count == 1 && _model.LastCharPos != pos.Value)
-                        {
-                            _model.DeleteLastChar();
-                            _view.UpdateView(_model.GetField());
-
-                            if (!_model.Selection.CanSelect(pos.Value))
-                            {
-                                pos = null;
-                            }
-                        }
-                        else if (!_model.Selection.CanSelect(pos.Value) || !_model.IsEmpty(pos.Value))
-                        {
-                            pos = null;
-                        }
-
-                        if (pos == null)
-                        {
-                            _model.DeleteLastChar();
-                            _view.UpdateView(_model.GetField());
-                        }
-
-                        _model.Selection.Select(pos);
-                    }
-                    break;
-                case SelectionMode.Multiple:
-                    {
-                        if (!_model.Selection.CanSelect(pos.Value))
-                        {
-                            pos = null;
-                        }
-
-                        _model.Selection.Select(pos);
-                    }
-                    break;
-            }
-
+            _model.Selection.Select(pos);
+            _view.UpdateView(_model.GetField());
             _view.UpdateSelection(_model.Selection.Positions);
 
             OnCellClick?.Invoke(cell);

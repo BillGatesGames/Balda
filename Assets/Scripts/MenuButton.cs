@@ -20,7 +20,6 @@ namespace Balda
             _button.OnClick = Button_OnClick;
         }
 
-        // Update is called once per frame
         void Update()
         {
 

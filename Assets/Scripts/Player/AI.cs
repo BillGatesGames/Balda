@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Balda
@@ -106,7 +107,7 @@ namespace Balda
         public HashSet<Word> GetWords()
         {
             var words = new HashSet<Word>();
-            var emptyCells = new HashSet<Vector2Int>();
+            var allData = new List<SearchData>();
 
             int size = _field.GetModel().GetSize();
             var trie = _field.GetModel().GetTrie();
@@ -134,7 +135,7 @@ namespace Balda
                                 Visited = new HashSet<int>()
                             };
 
-                            DFS(data);
+                            allData.Add(data);
                         }
 
                         for (int i = 0; i < _dxdy.Count; i++)
@@ -146,7 +147,22 @@ namespace Balda
                             {
                                 if (field[dx, dy] == null)
                                 {
-                                    emptyCells.Add(new Vector2Int(dx, dy));
+                                    foreach (var kvp in trie.Root.Children)
+                                    {
+                                        var data = new SearchData()
+                                        {
+                                            X = dx,
+                                            Y = dy,
+                                            Field = (char?[,])field.Clone(),
+                                            EmptyCellUsed = true,
+                                            Node = kvp.Value,
+                                            Word = new Word(),
+                                            Words = words,
+                                            Visited = new HashSet<int>()
+                                        };
+
+                                        allData.Add(data);
+                                    }
                                 }
                             }
                         }
@@ -154,25 +170,22 @@ namespace Balda
                 }
             }
 
-            foreach (var pos in emptyCells)
-            {
-                foreach (var kvp in trie.Root.Children)
-                {
-                    var data = new SearchData()
-                    {
-                        X = pos.x,
-                        Y = pos.y,
-                        Field = (char?[,])field.Clone(),
-                        EmptyCellUsed = true,
-                        Node = kvp.Value,
-                        Word = new Word(),
-                        Words = words,
-                        Visited = new HashSet<int>()
-                    };
+            float startTime = Time.realtimeSinceStartup;
 
-                    DFS(data);
-                }
-            }
+            #if UNITY_WEBGL
+            foreach (var data in allData)
+            {
+                DFS(data);
+            }        
+            #else
+            Parallel.ForEach(allData, data =>
+            {
+                DFS(data);
+            });
+            #endif
+
+            float secs = Time.realtimeSinceStartup - startTime;
+            Debug.Log($"Search duration: {secs} secs");
 
             foreach (string word in _field.GetModel().ExcludedWords)
             {
@@ -216,7 +229,10 @@ namespace Balda
                 {
                     if (!IsSubWord(data.Word))
                     {
-                        data.Words.Add(data.Word);
+                        lock (data.Words)
+                        {
+                            data.Words.Add(data.Word);
+                        }
                     }
                 }
             }

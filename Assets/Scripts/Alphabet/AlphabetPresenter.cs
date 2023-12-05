@@ -2,7 +2,7 @@ using System;
 
 namespace Balda
 {
-    public sealed class AlphabetPresenter : IAlphabetPresenter, IDisposable
+    public sealed class AlphabetPresenter : IAlphabetPresenter
     {
         public event Action<Cell> OnCellClick;
 

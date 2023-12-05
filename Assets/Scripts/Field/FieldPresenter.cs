@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Balda
 {
-    public sealed class FieldPresenter : IFieldPresenter, IDisposable
+    public sealed class FieldPresenter : IFieldPresenter
     {
         public event Action<Cell> OnCellClick;
 

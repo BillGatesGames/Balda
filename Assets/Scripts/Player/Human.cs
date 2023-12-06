@@ -51,7 +51,7 @@ namespace Balda
             {
                 case SubState.LetterSelection:
                     {
-                        if (_field.GetModel().LastCharPos.HasValue)
+                        if (_field.GetModel().GetLastCharPos().HasValue)
                         {
                             OnLetterSet?.Invoke(this);
                         }
@@ -64,7 +64,7 @@ namespace Balda
                             return;
                         }
 
-                        if (_field.GetModel().TrySetSelectedWord())
+                        if (_field.GetModel().TryAddSelectedWord())
                         {
                             var word = _field.GetModel().Selection.GetWord();
                             _wordList.AddWord(word);
@@ -81,7 +81,6 @@ namespace Balda
                     break;
             }
         }
-
 
         private void Message_OnRightButtonClick()
         {
@@ -117,6 +116,7 @@ namespace Balda
             if (!disposedValue)
             {
                 Unsubscribe();
+
                 disposedValue = true;
             }
         }

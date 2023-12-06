@@ -66,13 +66,13 @@ namespace Balda
                         if (_model.IsEmpty(pos))
                         {
                             //и ее нельзя выделить, то обнуляем позицию
-                            if (!CanSelectInSingleMode(pos, _model.LastCharPos))
+                            if (!CanSelectInSingleMode(pos, _model.GetLastCharPos()))
                             {
                                 canSelect = false;
                             }
 
                             //если есть новая буква, то удаляем
-                            if (_model.LastCharPos.HasValue)
+                            if (_model.GetLastCharPos().HasValue)
                             {
                                 _model.DeleteLastChar();
                             }
@@ -80,13 +80,13 @@ namespace Balda
                         else
                         {
                             //если есть новая буква
-                            if (_model.LastCharPos.HasValue)
+                            if (_model.GetLastCharPos().HasValue)
                             {
                                 //она выделена 
-                                if (_positions.Contains(_model.LastCharPos.Value))
+                                if (_positions.Contains(_model.GetLastCharPos().Value))
                                 {
                                     //и нажатая клетка не совпадает с выделенной, то обнуляем
-                                    if (pos != _model.LastCharPos)
+                                    if (pos != _model.GetLastCharPos())
                                     {
                                         _model.DeleteLastChar();
                                         canSelect = false;

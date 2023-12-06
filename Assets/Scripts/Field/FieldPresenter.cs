@@ -51,7 +51,7 @@ namespace Balda
 
         public void CellClick(Cell cell)
         {
-            if (_model.IsLocked)
+            if (_model.InputLocked)
             {
                 return;
             }
@@ -84,7 +84,7 @@ namespace Balda
                 case State.Player1Move:
                 case State.Player2Move:
                     {
-                        _model.IsLocked = data.InputLocking;
+                        _model.InputLocked = data.InputLocking;
 
                         SwitchToSubState(data.SubState);
 
@@ -131,7 +131,7 @@ namespace Balda
                 _view.UpdateSelection(_model.Selection.Positions);
             }
 
-            _model.TrySetSelectedWord();
+            _model.TryAddSelectedWord();
 
             yield return new WaitForSeconds(delay);
 

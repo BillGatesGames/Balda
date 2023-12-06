@@ -105,7 +105,7 @@ namespace Balda.Tests
         }
 
         /// <summary>
-        /// Два раза выбрать одну и ту же пустую клетку, у которой соседями с буквами 
+        /// Два раза выбрать одну и ту же пустую клетку, у которой соседи с буквами 
         /// </summary>
         [Test]
         public void DoubleSelectEmptyCellAroundOccupiedCells()

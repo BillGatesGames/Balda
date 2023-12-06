@@ -12,8 +12,9 @@ namespace Balda
         private char?[,] _field;
         private Trie _trie;
         private HashSet<string> _excludedWords;
+        private Vector2Int? _lastCharPos;
 
-        public bool IsLocked { get; set; } = false;
+        public bool InputLocked { get; set; } = false;
 
         public IReadOnlyCollection<string> ExcludedWords
         {
@@ -27,16 +28,6 @@ namespace Balda
         {
             get;
             private set;
-        }
-
-        private Vector2Int? _lastCharPos;
-
-        public Vector2Int? LastCharPos
-        {
-            get
-            {
-                return _lastCharPos;
-            }
         }
 
         public bool IsFilled
@@ -113,7 +104,7 @@ namespace Balda
             return _field;
         }
 
-        public bool TrySetSelectedWord()
+        public bool TryAddSelectedWord()
         {
             if (!_lastCharPos.HasValue)
             {
@@ -141,6 +132,11 @@ namespace Balda
         public bool IsEmpty(Vector2Int pos)
         {
             return !_field[pos.x, pos.y].HasValue;
+        }
+
+        public Vector2Int? GetLastCharPos()
+        {
+            return _lastCharPos;
         }
 
         public void DeleteLastChar()

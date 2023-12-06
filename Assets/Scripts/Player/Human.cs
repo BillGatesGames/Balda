@@ -59,6 +59,11 @@ namespace Balda
                     break;
                 case SubState.WordSelection:
                     {
+                        if (_field.GetModel().Selection.Positions.Count == 0)
+                        {
+                            return;
+                        }
+
                         if (_field.GetModel().TrySetSelectedWord())
                         {
                             var word = _field.GetModel().Selection.GetWord();

@@ -153,7 +153,7 @@ namespace Balda
             _lastCharPos = null;
         }
 
-        public void SetChar(Vector2Int pos, char @char)
+        public void SetChar(Vector2Int pos, char? @char)
         {
             _lastCharPos = pos;
             _field[pos.x, pos.y] = @char;

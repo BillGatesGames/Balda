@@ -146,8 +146,6 @@ namespace Balda.Tests
                 _model.Selection.Select(cell);
 
                 Assert.AreEqual(1, _model.Selection.Positions.Count);
-
-                _model.DeleteLastChar();
             }
         }
 
@@ -170,8 +168,6 @@ namespace Balda.Tests
                 _model.Selection.Select(cell);
 
                 Assert.AreEqual(1, _model.Selection.Positions.Count);
-
-                _model.DeleteLastChar();
             }
         }
 
@@ -203,8 +199,6 @@ namespace Balda.Tests
 
                     Assert.AreEqual(1, _model.Selection.Positions.Count);
                     Assert.AreEqual(cells[j], _model.Selection.Positions.First());
-
-                    _model.DeleteLastChar();
                 }
             }
         }
@@ -232,8 +226,6 @@ namespace Balda.Tests
                     _model.Selection.Select(cells2[j]);
 
                     Assert.AreEqual(0, _model.Selection.Positions.Count);
-
-                    _model.DeleteLastChar();
                 }
             }
         }
@@ -260,17 +252,8 @@ namespace Balda.Tests
                     _model.Selection.Select(cells2[j]);
 
                     Assert.AreEqual(0, _model.Selection.Positions.Count);
-
-                    _model.DeleteLastChar();
                 }
             }
-        }
-
-        public override void Teardown()
-        {
-            base.Teardown();
-
-            _model = null;
         }
     }
 }

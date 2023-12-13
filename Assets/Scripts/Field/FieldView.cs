@@ -111,8 +111,6 @@ namespace Balda
         void OnDestroy()
         {
             Clear();
-
-            _presenter = null;
         }
     }
 }

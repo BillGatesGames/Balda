@@ -12,7 +12,6 @@ namespace Balda
 
         private IFieldView _view;
         private IFieldModel _model;
-        private bool disposedValue;
 
         private FieldPresenter() { }
 
@@ -138,25 +137,9 @@ namespace Balda
             callback?.Invoke();
         }
 
-        private void Clean()
-        {
-            if (!disposedValue)
-            {
-                EventBus.Unregister(this);
-
-                disposedValue = true;
-            }
-        }
-
-        ~FieldPresenter()
-        {
-            Clean();
-        }
-
         public void Dispose()
         {
-            Clean();
-            GC.SuppressFinalize(this);
+            EventBus.Unregister(this);
         }
     }
 }

@@ -8,7 +8,6 @@ namespace Balda
 
         private IAlphabetView _view;
         private IAlphabetModel _model;
-        private bool disposedValue;
 
         private AlphabetPresenter() { }
 
@@ -50,25 +49,9 @@ namespace Balda
             }
         }
 
-        private void Clean()
-        {
-            if (!disposedValue)
-            {
-                EventBus.Unregister(this);
-                
-                disposedValue = true;
-            }
-        }
-
-        ~AlphabetPresenter()
-        {
-            Clean();
-        }
-
         public void Dispose()
         {
-            Clean();
-            GC.SuppressFinalize(this);
+            EventBus.Unregister(this);
         }
     }
 }

@@ -1,9 +1,7 @@
 using NUnit.Framework;
 using System.Collections;
 using UnityEngine.TestTools;
-using System.Linq;
 using UnityEngine;
-using System.Collections.Generic;
 
 namespace Balda.Tests
 {
@@ -33,19 +31,12 @@ namespace Balda.Tests
             _model.Selection.Select(new Vector2Int(1, 2));
         }
 
-        private void UnsetLetter()
-        {
-            _model.SetChar(_letterPos, null);
-        }
-
         [Test]
         public void SelectWord()
         {
             SetLetterAndSelectWord();
 
             Assert.AreEqual(3, _model.Selection.Positions.Count);
-
-            UnsetLetter();
         }
 
         /// <summary>
@@ -63,8 +54,6 @@ namespace Balda.Tests
             _model.Selection.Select(new Vector2Int(4, 2));
 
             Assert.AreEqual(0, _model.Selection.Positions.Count);
-
-            UnsetLetter();
         }
 
         /// <summary>
@@ -81,8 +70,6 @@ namespace Balda.Tests
             _model.Selection.Select(new Vector2Int(0, 1));
 
             Assert.AreEqual(0, _model.Selection.Positions.Count);
-
-            UnsetLetter();
         }
 
         /// <summary>
@@ -104,8 +91,6 @@ namespace Balda.Tests
                 _model.Selection.Select(cell);
 
                 Assert.AreEqual(0, _model.Selection.Positions.Count);
-
-                UnsetLetter();
             }
         }
 
@@ -128,15 +113,7 @@ namespace Balda.Tests
                 _model.Selection.Select(cell);
 
                 Assert.AreEqual(0, _model.Selection.Positions.Count);
-
-                UnsetLetter();
             }
-        }
-
-        [UnityTearDown]
-        public IEnumerator TearDown()
-        {
-            yield return null;
         }
     }
 }

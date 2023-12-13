@@ -24,7 +24,6 @@ namespace Balda
 
         private IPlayer _player1;
         private IPlayer _player2;
-        private bool disposedValue;
 
         private StateMachinePresenter() { }
 
@@ -171,25 +170,9 @@ namespace Balda
             });
         }
 
-        private void Clean()
-        {
-            if (!disposedValue)
-            {
-                Unsubscribe();
-
-                disposedValue = true;
-            }
-        }
-
-        ~StateMachinePresenter()
-        {
-            Clean();
-        }
-
         public void Dispose()
         {
-            Clean();
-            GC.SuppressFinalize(this);
+            Unsubscribe();
         }
     }
 }

@@ -12,7 +12,6 @@ namespace Balda
 
         protected IMessageModel _model;
         protected IMessageView _view;
-        private bool disposedValue;
 
         private MessagePresenter() { }
 
@@ -63,25 +62,9 @@ namespace Balda
             }
         }
 
-        protected virtual void Clean()
-        {
-            if (!disposedValue)
-            {
-                EventBus.Unregister(this);
-
-                disposedValue = true;
-            }
-        }
-
-        ~MessagePresenter()
-        {
-            Clean();
-        }
-
         public void Dispose()
         {
-            Clean();
-            GC.SuppressFinalize(this);
+            EventBus.Unregister(this);
         }
     }
 }

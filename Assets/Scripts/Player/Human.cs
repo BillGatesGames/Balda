@@ -18,7 +18,6 @@ namespace Balda
         private IAlphabetPresenter _alphabet;
         private IWordListPresenter _wordList;
         private Func<(State State, SubState SubState)> _stateProvider;
-        private bool disposedValue;
 
         public bool InputLocking => false;
 
@@ -111,25 +110,9 @@ namespace Balda
             Subscribe();
         }
 
-        private void Clean()
-        {
-            if (!disposedValue)
-            {
-                Unsubscribe();
-
-                disposedValue = true;
-            }
-        }
-
-        ~Human()
-        {
-            Clean();
-        }
-
         public void Dispose()
         {
-            Clean();
-            GC.SuppressFinalize(this);
+            Unsubscribe();
         }
     }
 }

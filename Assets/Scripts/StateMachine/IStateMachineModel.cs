@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace Balda
 {
@@ -26,5 +27,24 @@ namespace Balda
     {
         public State State { get; set; }
         public SubState SubState { get; set; }
+    }
+
+    public interface IStateProvider
+    {
+        State State { get; }
+        SubState SubState { get; }
+    }
+
+    public class StateProvider : IStateProvider
+    {
+        private readonly IStateMachineModel _model;
+
+        public State State => _model.State;
+        public SubState SubState => _model.SubState;
+
+        public StateProvider(IStateMachineModel model)
+        {
+            _model = model;
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace Balda
 {
@@ -10,6 +11,9 @@ namespace Balda
     {
         [SerializeField]
         private GameObject _gameObject;
+
+        [SerializeField]
+        private CanvasGroup _canvasGroup;
 
         [SerializeField]
         private TextMeshProUGUI _title;
@@ -29,6 +33,9 @@ namespace Balda
         [SerializeField]
         private TextMeshProUGUI _rightBtnText;
 
+        [Inject]
+        private ILocalizationManager _localizationManager;
+
         private IMessagePresenter _presenter;
 
         public void Init(IMessagePresenter presenter)
@@ -40,7 +47,7 @@ namespace Balda
 
         public void Hide()
         {
-            _gameObject.SetActive(false);
+            SetActive(false);
         }
 
         public void SetData(MessageData data)
@@ -50,19 +57,27 @@ namespace Balda
                 _title.text = GetLocal(data.Title.Alias);
                 _title.gameObject.SetActive(data.Title.Active);
             }
-           
+
             _text.text = GetLocal(data.Message.Alias);
             _leftBtnText.text = GetLocal(data.LeftButton.Alias);
             _rightBtnText.text = GetLocal(data.RightButton.Alias);
 
             _leftBtn.gameObject.SetActive(data.LeftButton.Active);
             _rightBtn.gameObject.SetActive(data.RightButton.Active);
-            _gameObject.SetActive(data.Message.Active);
+
+            SetActive(data.Message.Active);
         }
 
         private string GetLocal(string text)
         {
-            return LocalizationManager.Instance.Get(text);
+            return _localizationManager.Get(text);
+        }
+
+        private void SetActive(bool value)
+        {
+            _canvasGroup.alpha = value ? 1f : 0f;
+            _canvasGroup.blocksRaycasts = value;
+            _canvasGroup.interactable = value;
         }
 
         private void Subscribe()
@@ -75,8 +90,16 @@ namespace Balda
 
         private void Unsubscribe()
         {
-            _leftBtn.onClick.RemoveListener(_presenter.LeftBtnClick);
-            _rightBtn.onClick.RemoveListener(_presenter.RightBtnClick);
+            if (_presenter != null)
+            {
+                _leftBtn.onClick.RemoveListener(_presenter.LeftBtnClick);
+                _rightBtn.onClick.RemoveListener(_presenter.RightBtnClick);
+            }
+        }
+
+        void Awake()
+        {
+            SetActive(false);
         }
 
         void Start()
@@ -87,8 +110,6 @@ namespace Balda
         void OnDestroy()
         {
             Unsubscribe();
-
-            _presenter = null;
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace Balda
 {
@@ -9,6 +10,7 @@ namespace Balda
     {
         event Action OnLeftButtonClick;
         event Action OnRightButtonClick;
+
         void LeftBtnClick();
         void RightBtnClick();
     }

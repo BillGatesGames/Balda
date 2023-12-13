@@ -3,14 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zenject;
 
 namespace Balda
 {
     public class FieldModel : IFieldModel
     {
+        private ITrie _trie;
         private int _size;
         private char?[,] _field;
-        private Trie _trie;
+        
         private HashSet<string> _excludedWords;
         private Vector2Int? _lastCharPos;
 
@@ -49,41 +51,31 @@ namespace Balda
             }
         }
 
-        public FieldModel(int size)
+        public FieldModel(int size, ITrie trie)
         {
             _size = size;
-
-            Init();
+            _trie = trie;
         }
 
-        public void Init()
+        public void Initialize()
         {
-            int size = GetSize();
-
-            if (size % 2 == 0)
-            {
-                throw new System.ArgumentException("Field size must be an odd number");
-            }
-
-            _size = size;
             _field = new char?[_size, _size];
-            _trie = new Trie();
             _excludedWords = new HashSet<string>();
-
+            
             Selection = new Selection(this);
 
             var words = _trie.Words.Where(w => w.Length == _size).ToList();
 
             if (words.Count == 0)
             {
-                throw new System.Exception("No word found to initialize the field");
+                throw new Exception("No word found to initialize the field");
             }
 
             string word = words[UnityEngine.Random.Range(0, words.Count)];
 
-            for (int x = 0; x < size; x++)
+            for (int x = 0; x < _size; x++)
             {
-                _field[x, size / 2] = word[x];
+                _field[x, _size / 2] = word[x];
             }
 
             _excludedWords.Add(word);
@@ -94,7 +86,7 @@ namespace Balda
             return _size;
         }
 
-        public Trie GetTrie()
+        public ITrie GetTrie()
         {
             return _trie;
         }

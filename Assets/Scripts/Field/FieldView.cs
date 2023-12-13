@@ -46,8 +46,7 @@ namespace Balda
                 for (int x = 0; x < size; x++)
                 {
                     var cell = Instantiate(_cellPrefab, _cellParent);
-                    cell.X = x;
-                    cell.Y = y;
+                    cell.Pos = new Vector2Int(x, y);
                     cell.Char = field[x, y];
                     cell.OnClick = LetterClick;
 

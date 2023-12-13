@@ -16,18 +16,6 @@ namespace Balda
         [SerializeField]
         private WordListItem _wordListItemPrefab;
 
-        private IWordListPresenter _presenter;
-
-        public void Init(IWordListPresenter presenter)
-        {
-            _presenter = presenter;
-        }
-
-        public void AddWord(string word)
-        {
-            _presenter.AddWord(word);
-        }
-
         private void SetTotalText(string text)
         {
             _totalText.text = text;
@@ -64,8 +52,6 @@ namespace Balda
         void OnDestroy()
         {
             Clear();
-
-            _presenter = null;
         }
     }
 }

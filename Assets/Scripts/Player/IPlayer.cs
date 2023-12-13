@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Zenject;
 
 namespace Balda
 {
@@ -9,12 +10,19 @@ namespace Balda
         AI
     }
 
-    public interface IPlayer : IDisposable
+    public enum PlayerSide
+    {
+        Left,
+        Right
+    }
+
+    public interface IPlayer : IInitializable, IDisposable
     {
         event Action<IPlayer> OnLetterSet;
         event Action<IPlayer> OnMoveCompleted;
         event Action<IPlayer> OnResetMoveState;
         event Action<IPlayer, SubState> OnError;
+        PlayerSide PlayerSide { get; set; }
         bool InputLocking { get; }
         void Move();
     }

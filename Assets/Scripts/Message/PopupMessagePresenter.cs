@@ -7,9 +7,8 @@ namespace Balda
 {
     public class PopupMessagePresenter : MessagePresenter
     {
-        public PopupMessagePresenter(IMessageModel model, IMessageView view) : base(model, view) 
-        { 
-            
+        public PopupMessagePresenter(IMessageModel model, IMessageView view) : base(model, view)
+        {
         }
 
         public override void SwitchToState(StateData data)

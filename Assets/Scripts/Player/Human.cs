@@ -1,8 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zenject;
 
 namespace Balda
 {
@@ -16,26 +15,29 @@ namespace Balda
         private IFieldPresenter _field;
         private IMessagePresenter _message;
         private IAlphabetPresenter _alphabet;
-        private IWordListPresenter _wordList;
-        private Func<(State State, SubState SubState)> _stateProvider;
-        private bool disposedValue;
+        private IWordListProvider _wordListProvider;
+        private IStateProvider _stateProvider;
 
         public bool InputLocking => false;
+        public PlayerSide PlayerSide { get; set; }
 
-        private Human() { }
-
-        public Human(IFieldPresenter field, IAlphabetPresenter alphabet, IMessagePresenter message, IWordListPresenter wordList, Func<(State State, SubState SubState)> stateProvider)
+        public Human(IFieldPresenter field, IMessagePresenter message, IAlphabetPresenter alphabet, IWordListProvider wordListProvider, IStateProvider stateProvider)
         {
             _field = field;
-            _alphabet = alphabet;
             _message = message;
-            _wordList = wordList;
+            _alphabet = alphabet;
+            _wordListProvider = wordListProvider;
             _stateProvider = stateProvider;
+        }
+
+        public void Initialize()
+        {
+            _wordListProvider.Get(PlayerSide).Initialize();
         }
 
         private void Alphabet_OnCellClick(Cell cell)
         {
-            if (_stateProvider().SubState == SubState.LetterSelection)
+            if (_stateProvider.SubState == SubState.LetterSelection)
             {
                 if (_field.GetModel().Selection.Positions.Count == 1)
                 {
@@ -47,7 +49,7 @@ namespace Balda
 
         private void Message_OnLeftButtonClick()
         {
-            switch (_stateProvider().SubState)
+            switch (_stateProvider.SubState)
             {
                 case SubState.LetterSelection:
                     {
@@ -67,7 +69,7 @@ namespace Balda
                         if (_field.GetModel().TryAddSelectedWord())
                         {
                             var word = _field.GetModel().Selection.GetWord();
-                            _wordList.AddWord(word);
+                            _wordListProvider.Get(PlayerSide).AddWord(word);
 
                             Unsubscribe();
 
@@ -84,7 +86,7 @@ namespace Balda
 
         private void Message_OnRightButtonClick()
         {
-            if (_stateProvider().SubState != SubState.None)
+            if (_stateProvider.SubState != SubState.None)
             {
                 OnResetMoveState?.Invoke(this);
             }
@@ -93,7 +95,7 @@ namespace Balda
         private void Subscribe()
         {
             Unsubscribe();
-
+     
             _alphabet.OnCellClick += Alphabet_OnCellClick;
             _message.OnLeftButtonClick += Message_OnLeftButtonClick;
             _message.OnRightButtonClick += Message_OnRightButtonClick;
@@ -111,25 +113,9 @@ namespace Balda
             Subscribe();
         }
 
-        private void Clean()
-        {
-            if (!disposedValue)
-            {
-                Unsubscribe();
-
-                disposedValue = true;
-            }
-        }
-
-        ~Human()
-        {
-            Clean();
-        }
-
         public void Dispose()
         {
-            Clean();
-            GC.SuppressFinalize(this);
+            Unsubscribe();
         }
     }
 }

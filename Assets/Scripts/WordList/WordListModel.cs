@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zenject;
 
 namespace Balda
 {
     public class WordListModel : IWordListModel
     {
+        [Inject]
+        private ILocalizationManager _localizationManager;
+
         public List<string> Words { get; }
 
         public WordListModel()
@@ -21,7 +25,7 @@ namespace Balda
 
         public string GetTotalText()
         {
-            return string.Format(LocalizationManager.Instance.Get("total"), Words.Sum(w => w.Length));
+            return string.Format(_localizationManager.Get("total"), Words.Sum(w => w.Length));
         }
     }
 }

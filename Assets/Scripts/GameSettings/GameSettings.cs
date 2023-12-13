@@ -51,7 +51,7 @@ namespace Balda
 
         private void Load()
         {
-            Size = GetInt(SIZE_KEY, 5);
+            Size = GetInt(SIZE_KEY, Constants.Field.SIZE_5x5);
             Player1 = (PlayerType)GetInt(PLAYER1_TYPE, (int)PlayerType.Human);
             Player2 = (PlayerType)GetInt(PLAYER2_TYPE, (int)PlayerType.AI);
             Lang = GetStr(LANG_KEY, Constants.Localization.EN);

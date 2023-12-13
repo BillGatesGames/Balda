@@ -1,0 +1,92 @@
+using System.Collections;
+using System.Collections.Generic;
+using System;
+using UnityEngine;
+using System.Linq;
+using Zenject;
+
+namespace Balda
+{
+    public class Node
+    {
+        public readonly char Letter;
+        public bool IsTerminal { get; set; }
+        public Dictionary<char, Node> Children { get; private set; }
+
+        public Node(char letter, bool isTerminal)
+        {
+            Letter = letter;
+            IsTerminal = isTerminal;
+            Children = new Dictionary<char, Node>();
+        }
+    }
+
+    public class Trie : ITrie
+    {
+        private ILocalizationManager _localizationManager;
+
+        public Node Root { get; private set; }
+
+        private HashSet<string> _words;
+        public IReadOnlyCollection<string> Words
+        {
+            get
+            {
+                return _words;
+            }
+        }
+
+        public Trie(ILocalizationManager localizationManager)
+        {
+            _localizationManager = localizationManager;
+        }
+
+        private HashSet<string> GetWordsList()
+        {
+            string fileName = _localizationManager.GetDictionaryFileName();
+            var asset = Resources.Load(fileName) as TextAsset;
+            var words = asset.text.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).ToList();
+            return new HashSet<string>(words);
+        }
+
+        private Node Build()
+        {
+            _words = GetWordsList();
+
+            var root = new Node('#', false);
+
+            foreach (var word in _words)
+            {
+                var curr = root;
+
+                for (int i = 0; i < word.Length; i++)
+                {
+                    bool isTerminal = i == word.Length - 1;
+
+                    if (curr.Children.ContainsKey(word[i]))
+                    {
+                        curr = curr.Children[word[i]];
+
+                        if (isTerminal)
+                        {
+                            curr.IsTerminal = isTerminal;
+                        }
+                    }
+                    else
+                    {
+                        Node node = new Node(word[i], isTerminal);
+                        curr.Children.Add(word[i], node);
+                        curr = node;
+                    }
+                }
+            }
+
+            return root;
+        }
+
+        public void Initialize()
+        {
+            Root = Build();
+        }
+    }
+}

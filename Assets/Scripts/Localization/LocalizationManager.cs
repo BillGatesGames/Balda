@@ -2,14 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zenject;
 
 namespace Balda
 {
-    public class LocalizationManager : Singleton<LocalizationManager>
+    public class LocalizationManager : ILocalizationManager
     {
+        private IResourceLoader _resourceLoader;
         private LocalizationData _data;
         private HashSet<string> _langs;
         private string _lang = string.Empty;
+
+        public LocalizationManager(string lang, IResourceLoader resourceLoader)
+        {
+            _resourceLoader = resourceLoader;
+            _lang = lang;
+        }
+
+        public void Initialize()
+        {
+            LoadLocalization();
+            UpdateLocalization();
+        }
 
         public string GetAlphabet()
         {
@@ -60,9 +74,9 @@ namespace Balda
 
         public void LoadLocalization()
         {
-            _data = ResourceLoader.Instance.LoadLocal<LocalizationData>(Constants.Localization.FILE_NAME);
+            _data = _resourceLoader.LoadLocal<LocalizationData>(Constants.Localization.FILE_NAME);
             _langs = new HashSet<string>();
-            
+
             foreach (var lang in _data.Configs.Keys)
             {
                 if (!_data.Localization.ContainsKey(lang))
@@ -74,7 +88,7 @@ namespace Balda
 
         public void UpdateLocalization()
         {
-            var list = FindObjectsOfType<Localization>(true).ToList();
+            var list = GameObject.FindObjectsOfType<Localization>(true).ToList();
 
             foreach (var item in list)
             {

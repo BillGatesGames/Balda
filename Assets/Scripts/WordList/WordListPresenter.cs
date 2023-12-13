@@ -1,25 +1,20 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Balda
 {
-    public sealed class WordListPresenter : IWordListPresenter
+    public class WordListPresenter : IWordListPresenter
     {
         private IWordListModel _model;
         private IWordListView _view;
-        private bool disposedValue;
-
-        private WordListPresenter() { }
 
         public WordListPresenter(IWordListModel model, IWordListView view)
         {
             _model = model;
             _view = view;
-            _view.Init(this);
+        }
 
+        public void Initialize()
+        {
             EventBus.Register(this);
         }
 
@@ -54,25 +49,9 @@ namespace Balda
             _view.UpdateView(_model.Words, _model.GetTotalText());
         }
 
-        private void Clean()
-        {
-            if (!disposedValue)
-            {
-                EventBus.Unregister(this);
-
-                disposedValue = true;
-            }
-        }
-
-        ~WordListPresenter()
-        {
-            Clean();
-        }
-
         public void Dispose()
         {
-            Clean();
-            GC.SuppressFinalize(this);
+            EventBus.Unregister(this);
         }
     }
 }

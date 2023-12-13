@@ -1,4 +1,5 @@
 using System;
+using Zenject;
 
 namespace Balda
 {
@@ -6,17 +7,21 @@ namespace Balda
     {
         public event Action<Cell> OnCellClick;
 
+        [Inject]
         private IAlphabetView _view;
+
+        [Inject]
         private IAlphabetModel _model;
+        
         private bool disposedValue;
 
-        private AlphabetPresenter() { }
-
-        public AlphabetPresenter(IAlphabetModel model, IAlphabetView view)
+        public AlphabetPresenter()
         {
-            _model = model;
 
-            _view = view;
+        }
+
+        public void Initialize()
+        {
             _view.Init(this);
 
             EventBus.Register(this);
@@ -50,25 +55,9 @@ namespace Balda
             }
         }
 
-        private void Clean()
-        {
-            if (!disposedValue)
-            {
-                EventBus.Unregister(this);
-                
-                disposedValue = true;
-            }
-        }
-
-        ~AlphabetPresenter()
-        {
-            Clean();
-        }
-
         public void Dispose()
         {
-            Clean();
-            GC.SuppressFinalize(this);
+            EventBus.Unregister(this);
         }
     }
 }

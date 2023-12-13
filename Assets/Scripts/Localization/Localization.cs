@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
 namespace Balda
 {
@@ -16,9 +17,12 @@ namespace Balda
         [SerializeField]
         private bool _upperCase;
 
+        [Inject]
+        private ILocalizationManager _localizationManager;
+
         public void UpdateText()
         {
-            _text.text = LocalizationManager.Instance.Get(_alias);
+            _text.text = _localizationManager.Get(_alias);
 
             ToUpperCase();
         }
@@ -26,7 +30,7 @@ namespace Balda
         public void SetAlias(string alias, params object[] args)
         {
             _alias = alias;
-            _text.text = string.Format(LocalizationManager.Instance.Get(_alias), args);
+            _text.text = string.Format(_localizationManager.Get(_alias), args);
 
             ToUpperCase();
         }

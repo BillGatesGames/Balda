@@ -1,4 +1,5 @@
 using System;
+using Zenject;
 
 namespace Balda
 {
@@ -6,13 +7,17 @@ namespace Balda
     {
         private IMenuView _view;
         private IGameSettings _settings;
+        private ILocalizationManager _localizationManager;
 
-        private MenuPresenter() { }
-
-        public MenuPresenter(IMenuView view, IGameSettings settings)
-        {
-            _settings = settings;
+        public MenuPresenter(IMenuView view, IGameSettings settings, ILocalizationManager localizationManager) 
+        { 
             _view = view;
+            _settings = settings;
+            _localizationManager = localizationManager;
+        }
+
+        public void Initialize()
+        {
             _view.Init(this);
 
             UpdateView();
@@ -28,8 +33,8 @@ namespace Balda
             _settings.Lang = lang;
             _settings.Save();
 
-            LocalizationManager.Instance.SetLang(_settings.Lang);
-            LocalizationManager.Instance.UpdateLocalization();
+            _localizationManager.SetLang(_settings.Lang);
+            _localizationManager.UpdateLocalization();
 
             UpdateView();
         }

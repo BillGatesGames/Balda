@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using Zenject;
 
 namespace Balda
 {
@@ -46,18 +47,20 @@ namespace Balda
         public event Action<IPlayer> OnResetMoveState;
         public event Action<IPlayer, SubState> OnError;
 
+        public PlayerSide PlayerSide { get; set; }
+
         private IFieldPresenter _field;
-        private IWordListPresenter _wordList;
+        private IWordListProvider _wordListProvider;
+
         private List<Vector2Int> _dxdy;
 
         public bool InputLocking => true;
 
-        private AI() { }
-
-        public AI(IFieldPresenter field, IWordListPresenter wordList)
+        public AI(IFieldPresenter field, IWordListProvider wordListProvider)
         {
             _field = field;
-            _wordList = wordList;
+            _wordListProvider = wordListProvider;
+
             _dxdy = new List<Vector2Int>()
             {
                 new Vector2Int(-1, 0),
@@ -65,6 +68,11 @@ namespace Balda
                 new Vector2Int(0, 1),
                 new Vector2Int(0, -1)
             };
+        }
+
+        public void Initialize()
+        {
+            _wordListProvider.Get(PlayerSide).Initialize();
         }
 
         public void Move()
@@ -99,7 +107,7 @@ namespace Balda
 
             yield return Routiner.Instance.StartCoroutine(_field.ShowWord(word, Constants.AI.WORD_LETTER_SHOW_DURATION, () =>
             {
-                _wordList.AddWord(word.ToString());
+                _wordListProvider.Get(PlayerSide).AddWord(word.ToString());
                 OnMoveCompleted?.Invoke(this);
             }));
         }

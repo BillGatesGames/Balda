@@ -26,8 +26,7 @@ namespace Balda
         [SerializeField]
         private Color _selectedColor;
 
-        public int X;
-        public int Y;
+        public Vector2Int Pos { get; set; }
 
         private char? _char;
 

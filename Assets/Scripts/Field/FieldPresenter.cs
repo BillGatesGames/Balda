@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zenject;
 
 namespace Balda
 {
@@ -12,18 +13,11 @@ namespace Balda
 
         private IFieldView _view;
         private IFieldModel _model;
-        private bool disposedValue;
-
-        private FieldPresenter() { }
-
-        public FieldPresenter(IFieldModel model, IFieldView view)
+        
+        public FieldPresenter(IFieldView view, IFieldModel model)
         {
-            _model = model;
-
             _view = view;
-            _view.Init(this);
-
-            EventBus.Register(this);
+            _model = model;
         }
 
         public IFieldModel GetModel()
@@ -34,6 +28,13 @@ namespace Balda
         public IFieldView GetView()
         {
             return _view;
+        }
+
+        public void Initialize()
+        {
+            _view.Init(this);
+
+            EventBus.Register(this);
         }
 
         public void SetChar(Vector2Int pos, char @char, bool selected = false)
@@ -56,9 +57,7 @@ namespace Balda
                 return;
             }
 
-            var pos = new Vector2Int(cell.X, cell.Y);
-
-            _model.Selection.Select(pos);
+            _model.Selection.Select(cell.Pos);
             _view.UpdateView(_model.GetField());
             _view.UpdateSelection(_model.Selection.Positions);
 
@@ -77,7 +76,7 @@ namespace Balda
             {
                 case State.Init:
                     {
-                        _model.Init();
+                        _model.Initialize();
                         _view.UpdateView(_model.GetField());
                     }
                     break;
@@ -138,25 +137,9 @@ namespace Balda
             callback?.Invoke();
         }
 
-        private void Clean()
-        {
-            if (!disposedValue)
-            {
-                EventBus.Unregister(this);
-
-                disposedValue = true;
-            }
-        }
-
-        ~FieldPresenter()
-        {
-            Clean();
-        }
-
         public void Dispose()
         {
-            Clean();
-            GC.SuppressFinalize(this);
+            EventBus.Unregister(this);
         }
     }
 }

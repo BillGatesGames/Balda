@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zenject;
 
 namespace Balda
 {
     public class AlphabetModel : IAlphabetModel
     {
+        [Inject]
+        private ILocalizationManager _localizationManager;
+
         private List<char> _chars;
 
         public IReadOnlyList<char> Chars
@@ -19,9 +23,9 @@ namespace Balda
 
         public bool IsLocked { get; set; } = false;
 
-        public AlphabetModel()
+        public void Initialize()
         {
-            _chars = LocalizationManager.Instance.GetAlphabet().ToCharArray().ToList();
+            _chars = _localizationManager.GetAlphabet().ToCharArray().ToList();
         }
     }
 }

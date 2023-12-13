@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Zenject;
 
 namespace Balda
 {
-    public interface IPresenter : IDisposable
+    public interface IPresenter : IInitializable, IDisposable
     {
 
     }

@@ -23,13 +23,15 @@ namespace Balda
         private IFieldPresenter _field;
         private IMessagePresenter _message;
         private IPlayersProvider _players;
+        private SignalBus _signalBus;
 
-        public StateMachinePresenter(IStateMachineModel model, IFieldPresenter field, IMessagePresenter message, IPlayersProvider players) 
+        public StateMachinePresenter(IStateMachineModel model, IFieldPresenter field, IMessagePresenter message, IPlayersProvider players, SignalBus signalBus) 
         { 
             _model = model;
             _field = field;
             _message = message;
             _players = players;
+            _signalBus = signalBus;
         }
 
         public void Initialize()
@@ -178,10 +180,7 @@ namespace Balda
 
             var data = new StateData(player != null ? player.InputLocking : true, _model);
 
-            EventBus.RaiseEvent<IStateHandler>(h =>
-            {
-                h.SwitchToState(data);
-            });
+            _signalBus.Fire(data);
         }
 
         public void Dispose()

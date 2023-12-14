@@ -7,24 +7,22 @@ namespace Balda
     {
         public event Action<Cell> OnCellClick;
 
-        [Inject]
         private IAlphabetView _view;
-
-        [Inject]
         private IAlphabetModel _model;
-        
-        private bool disposedValue;
+        private SignalBus _signalBus;
 
-        public AlphabetPresenter()
+        public AlphabetPresenter(IAlphabetModel model, IAlphabetView view, SignalBus signalBus)
         {
-
+            _model = model;
+            _view = view;
+            _signalBus = signalBus;
         }
 
         public void Initialize()
         {
             _view.Init(this);
 
-            EventBus.Register(this);
+            _signalBus.Subscribe<StateData>(SwitchToState);
         }
 
         public void CellClick(Cell cell)
@@ -57,7 +55,7 @@ namespace Balda
 
         public void Dispose()
         {
-            EventBus.Unregister(this);
+            _signalBus.Unsubscribe<StateData>(SwitchToState);
         }
     }
 }

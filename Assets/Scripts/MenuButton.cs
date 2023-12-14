@@ -1,18 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace Balda
 {
-    public class MenuButton : MonoBehaviour
+    public sealed class MenuButton : MonoBehaviour
     {
         [SerializeField]
         private ButtonEx _button;
 
+        private SignalBus _signalBus;
+
+        [Inject]
+        public void Construct(SignalBus signalBus)
+        {
+            _signalBus = signalBus;
+        }
+
         private void Button_OnClick(ButtonEx button)
         {
-            EventBus.RaiseEvent<ISceneLoadHandler>(h => h.Load(Constants.Scenes.MENU));
-            EventBus.Clear();
+            _signalBus.Fire(Constants.Scenes.MENU);
         }
 
         void Start()

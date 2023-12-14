@@ -1,13 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Zenject;
 
 namespace Balda
 {
-    public class PopupMessagePresenter : MessagePresenter
+    public sealed class PopupMessagePresenter : MessagePresenter
     {
-        public PopupMessagePresenter(IMessageModel model, IMessageView view) : base(model, view)
+        public PopupMessagePresenter(IMessageModel model, IMessageView view, SignalBus signalBus) : base(model, view, signalBus)
         {
         }
 

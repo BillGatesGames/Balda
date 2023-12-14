@@ -2,24 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Zenject;
 
 namespace Balda
 {
-    public class SceneLoader : MonoBehaviour, ISceneLoadHandler
+    public sealed class SceneLoader : MonoBehaviour, ISceneLoadHandler
     {
+        private SignalBus _signalBus;
+
+        [Inject]
+        public void Construct(SignalBus signalBus)
+        {
+            _signalBus = signalBus;
+        }
+
         public void Load(int index)
         {
-           SceneManager.LoadScene(index);
+            SceneManager.LoadScene(index);
         }
 
         void Start()
         {
-            EventBus.Register(this);
+            _signalBus.Subscribe<int>(Load);
         }
 
         void OnDestroy()
         {
-            EventBus.Unregister(this);
+            _signalBus.Unsubscribe<int>(Load);
         }
     }
 }

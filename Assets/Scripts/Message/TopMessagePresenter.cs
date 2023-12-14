@@ -1,13 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Zenject;
 
 namespace Balda
 {
-    public class TopMessagePresenter : MessagePresenter
+    public sealed class TopMessagePresenter : MessagePresenter
     {
-        public TopMessagePresenter(IMessageModel model, IMessageView view) : base(model, view)
+        public TopMessagePresenter(IMessageModel model, IMessageView view, SignalBus signalBus) : base(model, view, signalBus)
         {
         }
 

@@ -3,17 +3,19 @@ using Zenject;
 
 namespace Balda
 {
-    public class MenuPresenter : IMenuPresenter
+    public sealed class MenuPresenter : IMenuPresenter
     {
         private IMenuView _view;
         private IGameSettings _settings;
         private ILocalizationManager _localizationManager;
+        private SignalBus _signalBus;
 
-        public MenuPresenter(IMenuView view, IGameSettings settings, ILocalizationManager localizationManager) 
+        public MenuPresenter(IMenuView view, IGameSettings settings, ILocalizationManager localizationManager, SignalBus signalBus) 
         { 
             _view = view;
             _settings = settings;
             _localizationManager = localizationManager;
+            _signalBus = signalBus;
         }
 
         public void Initialize()
@@ -25,7 +27,7 @@ namespace Balda
 
         public void PlayClick()
         {
-            EventBus.RaiseEvent<ISceneLoadHandler>(h => h.Load(Constants.Scenes.GAME));
+            _signalBus.Fire(Constants.Scenes.GAME);
         }
 
         public void LangClick(string lang)

@@ -11,18 +11,21 @@ namespace Balda
 
         protected IMessageModel _model;
         protected IMessageView _view;
+        protected SignalBus _signalBus;
 
-        public MessagePresenter(IMessageModel model, IMessageView view)
+        public MessagePresenter(IMessageModel model, IMessageView view, SignalBus signalBus)
         {
             _model = model;
             _view = view;
+            _signalBus = signalBus;
         }
 
         public virtual void Initialize()
         {
             _view.Init(this);
 
-            EventBus.Register(this);
+            _signalBus.TryUnsubscribe<StateData>(SwitchToState);
+            _signalBus.Subscribe<StateData>(SwitchToState);
         }
 
         public virtual void LeftBtnClick()
@@ -42,7 +45,7 @@ namespace Balda
 
         public virtual void Dispose()
         {
-            EventBus.Unregister(this);
+            _signalBus.Unsubscribe<StateData>(SwitchToState);
         }
     }
 }

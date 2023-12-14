@@ -1,21 +1,25 @@
 using System.Linq;
+using Zenject;
 
 namespace Balda
 {
-    public class WordListPresenter : IWordListPresenter
+    public sealed class WordListPresenter : IWordListPresenter
     {
         private IWordListModel _model;
         private IWordListView _view;
+        private SignalBus _signalBus;
 
-        public WordListPresenter(IWordListModel model, IWordListView view)
+        public WordListPresenter(IWordListModel model, IWordListView view, SignalBus signalBus)
         {
             _model = model;
             _view = view;
+            _signalBus = signalBus;
         }
 
         public void Initialize()
         {
-            EventBus.Register(this);
+            _signalBus.TryUnsubscribe<StateData>(SwitchToState);
+            _signalBus.Subscribe<StateData>(SwitchToState);
         }
 
         public void AddWord(string text)
@@ -51,7 +55,7 @@ namespace Balda
 
         public void Dispose()
         {
-            EventBus.Unregister(this);
+            _signalBus.Unsubscribe<StateData>(SwitchToState);
         }
     }
 }

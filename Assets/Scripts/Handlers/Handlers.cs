@@ -1,17 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace Balda
 {
-    public interface IHandler { }
-
-    public interface IStateHandler : IHandler
+    public interface IStateHandler
     {
         void SwitchToState(StateData data);
     }
 
-    public interface ISceneLoadHandler : IHandler
+    public interface ISceneLoadHandler
     {
         void Load(int index);
     }

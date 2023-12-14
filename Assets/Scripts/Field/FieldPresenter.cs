@@ -13,11 +13,13 @@ namespace Balda
 
         private IFieldView _view;
         private IFieldModel _model;
-        
-        public FieldPresenter(IFieldView view, IFieldModel model)
+        private SignalBus _signalBus;
+
+        public FieldPresenter(IFieldView view, IFieldModel model, SignalBus signalBus)
         {
             _view = view;
             _model = model;
+            _signalBus = signalBus;
         }
 
         public IFieldModel GetModel()
@@ -34,7 +36,7 @@ namespace Balda
         {
             _view.Init(this);
 
-            EventBus.Register(this);
+            _signalBus.Subscribe<StateData>(SwitchToState);
         }
 
         public void SetChar(Vector2Int pos, char @char, bool selected = false)
@@ -139,7 +141,7 @@ namespace Balda
 
         public void Dispose()
         {
-            EventBus.Unregister(this);
+            _signalBus.Unsubscribe<StateData>(SwitchToState);
         }
     }
 }

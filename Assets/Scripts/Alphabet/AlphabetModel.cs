@@ -8,11 +8,9 @@ namespace Balda
 {
     public class AlphabetModel : IAlphabetModel
     {
-        [Inject]
         private ILocalizationManager _localizationManager;
 
         private List<char> _chars;
-
         public IReadOnlyList<char> Chars
         {
             get
@@ -22,6 +20,11 @@ namespace Balda
         }
 
         public bool IsLocked { get; set; } = false;
+
+        public AlphabetModel(ILocalizationManager localizationManager)
+        {
+            _localizationManager = localizationManager;
+        }
 
         public void Initialize()
         {

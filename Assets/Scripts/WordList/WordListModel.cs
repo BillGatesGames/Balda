@@ -8,13 +8,13 @@ namespace Balda
 {
     public class WordListModel : IWordListModel
     {
-        [Inject]
         private ILocalizationManager _localizationManager;
 
         public List<string> Words { get; }
 
-        public WordListModel()
+        public WordListModel(ILocalizationManager localizationManager)
         {
+            _localizationManager = localizationManager;
             Words = new List<string>();
         }
 

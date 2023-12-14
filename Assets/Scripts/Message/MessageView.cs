@@ -33,10 +33,14 @@ namespace Balda
         [SerializeField]
         private TextMeshProUGUI _rightBtnText;
 
-        [Inject]
         private ILocalizationManager _localizationManager;
-
         private IMessagePresenter _presenter;
+
+        [Inject]
+        public void Construct(ILocalizationManager localizationManager)
+        {
+            _localizationManager = localizationManager;
+        }
 
         public void Init(IMessagePresenter presenter)
         {

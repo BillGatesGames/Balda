@@ -17,8 +17,13 @@ namespace Balda
         [SerializeField]
         private bool _upperCase;
 
-        [Inject]
         private ILocalizationManager _localizationManager;
+
+        [Inject]
+        public void Construct(ILocalizationManager localizationManager)
+        {
+            _localizationManager = localizationManager;
+        }
 
         public void UpdateText()
         {

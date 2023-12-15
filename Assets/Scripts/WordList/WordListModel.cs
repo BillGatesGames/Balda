@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Balda
 {
-    public class WordListModel : IWordListModel
+    public sealed class WordListModel : IWordListModel
     {
         public List<string> Words { get; }
 

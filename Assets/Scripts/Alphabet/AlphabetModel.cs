@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Balda
 {
-    public class AlphabetModel : IAlphabetModel
+    public sealed class AlphabetModel : IAlphabetModel
     {
         private List<char> _chars;
 

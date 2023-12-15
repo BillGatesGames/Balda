@@ -87,8 +87,6 @@ namespace Balda
         void OnDestroy()
         {
             Unsubscribe();
-
-            _presenter = null;
         }
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Balda
 {
-    public class FieldModel : IFieldModel
+    public sealed class FieldModel : IFieldModel
     {
         private int _size;
         private char?[,] _field;
@@ -34,18 +34,7 @@ namespace Balda
         {
             get
             {
-                for (int y = 0; y < _size; y++)
-                {
-                    for (int x = 0; x < _size; x++)
-                    {
-                        if (_field[x, y] == null)
-                        {
-                            return false;
-                        }
-                    }
-                }
-
-                return true;
+                return _field.IsFilled();
             }
         }
 

@@ -13,20 +13,14 @@ namespace Balda
 
         public string GetAlphabet()
         {
-            if (string.IsNullOrEmpty(_lang))
-            {
-                _lang = Constants.Localization.FALLBACK_LANG;
-            }
+            CheckLang();
 
             return _data.Configs[_lang].Alphabet;
         }
 
         public string GetDictionaryFileName()
         {
-            if (string.IsNullOrEmpty(_lang))
-            {
-                _lang = Constants.Localization.FALLBACK_LANG;
-            }
+            CheckLang();
 
             return _data.Configs[_lang].FileName;
         }
@@ -40,10 +34,7 @@ namespace Balda
 
         public string Get(string alias)
         {
-            if (string.IsNullOrEmpty(_lang))
-            {
-                _lang = Constants.Localization.FALLBACK_LANG;
-            }
+            CheckLang();
 
             if (_data != null)
             {
@@ -79,6 +70,14 @@ namespace Balda
             foreach (var item in list)
             {
                 item.UpdateText();
+            }
+        }
+
+        private void CheckLang()
+        {
+            if (string.IsNullOrEmpty(_lang))
+            {
+                SetLang(Constants.Localization.FALLBACK_LANG);
             }
         }
     }

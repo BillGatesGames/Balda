@@ -2,7 +2,7 @@ using System;
 
 namespace Balda
 {
-    public class MenuPresenter : IMenuPresenter
+    public sealed class MenuPresenter : IMenuPresenter
     {
         private IMenuView _view;
         private IGameSettings _settings;

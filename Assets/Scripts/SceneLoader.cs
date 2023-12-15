@@ -9,7 +9,7 @@ namespace Balda
     {
         public void Load(int index)
         {
-           SceneManager.LoadScene(index);
+            SceneManager.LoadScene(index);
         }
 
         void Start()

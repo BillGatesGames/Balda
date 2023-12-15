@@ -1,4 +1,3 @@
-using Newtonsoft.Json.Bson;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -112,8 +111,6 @@ namespace Balda
         void OnDestroy()
         {
             Clear();
-
-            _presenter = null;
         }
     }
 }

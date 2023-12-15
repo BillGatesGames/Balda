@@ -38,7 +38,7 @@ namespace Balda
         }
     }
 
-    public class MessageModel : IMessageModel
+    public sealed class MessageModel : IMessageModel
     {
         public MessageData GetMessageData(StateData data)
         {

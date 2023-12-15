@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Balda
 {
-    public class StateMachineModel : IStateMachineModel
+    public sealed class StateMachineModel : IStateMachineModel
     {
         public State State { get; set; }
 

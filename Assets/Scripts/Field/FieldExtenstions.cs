@@ -6,6 +6,22 @@ namespace Balda
 {
     public static class FieldExtenstions
     {
+        public static bool IsFilled(this char?[,] field)
+        {
+            for (int y = 0; y < field.GetLength(1); y++)
+            {
+                for (int x = 0; x < field.GetLength(0); x++)
+                {
+                    if (field[x, y] == null)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
         public static HashSet<Vector2Int> GetEmptyCells(this char?[,] field)
         {
             var result = new HashSet<Vector2Int>();

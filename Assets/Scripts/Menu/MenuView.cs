@@ -254,8 +254,6 @@ namespace Balda
             _sizeGroup.Clean();
             _player1Group.Clean();
             _player2Group.Clean();
-
-            _presenter = null;
         }
     }
 }

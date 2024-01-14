@@ -137,7 +137,9 @@ namespace Balda
 
                             allData.Add(data);
                         }
-
+                    }
+                    else
+                    {
                         for (int i = 0; i < _dxdy.Count; i++)
                         {
                             int dx = x + _dxdy[i].x;
@@ -145,7 +147,7 @@ namespace Balda
 
                             if (InBounds(dx, dy))
                             {
-                                if (field[dx, dy] == null)
+                                if (field[dx, dy] != null)
                                 {
                                     foreach (var kvp in trie.Root.Children)
                                     {
@@ -163,6 +165,8 @@ namespace Balda
 
                                         allData.Add(data);
                                     }
+
+                                    break;
                                 }
                             }
                         }

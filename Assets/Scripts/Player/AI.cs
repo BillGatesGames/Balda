@@ -153,8 +153,8 @@ namespace Balda
                                     {
                                         var data = new SearchData()
                                         {
-                                            X = dx,
-                                            Y = dy,
+                                            X = x,
+                                            Y = y,
                                             Field = (char?[,])field.Clone(),
                                             EmptyCellUsed = true,
                                             Node = kvp.Value,
@@ -218,7 +218,6 @@ namespace Balda
         {
             int x = data.X;
             int y = data.Y;
-            char?[,] field = _field.GetModel().GetField();
 
             bool isNew = data.Field[x, y] == null;
             data.Field[x, y] = data.Node.Letter;
@@ -253,9 +252,9 @@ namespace Balda
                         continue;
                     }
 
-                    if (field[dx, dy] != null)
+                    if (data.Field[dx, dy] != null)
                     {
-                        var @char = field[dx, dy].Value;
+                        var @char = data.Field[dx, dy].Value;
 
                         if (data.Node.Children.ContainsKey(@char))
                         {
